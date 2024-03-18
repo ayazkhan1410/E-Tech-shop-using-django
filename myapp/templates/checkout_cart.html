@@ -1,0 +1,213 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %} 
+{% load humanize %}
+<!-- BEGIN #checkout-cart -->
+<div class="section-container" id="checkout-cart">
+    <!-- BEGIN container -->
+    <div class="container">
+        <!-- BEGIN checkout -->
+        <div class="checkout">
+           <form action="{% url 'add_to_cart' %}" method="post" id="cart-form">
+                {% csrf_token %}
+                <div class="checkout-header">
+                    <!-- BEGIN row -->
+                    <div class="row">
+                        <!-- BEGIN col-3 -->
+                        <div class="col-md-3 col-sm-3">
+                            <div class="step active">
+                                <a href="#">
+                                    <div class="number">1</div>
+                                    <div class="info">
+                                        <div class="title">Free Delivery</div>
+                                        <div class="desc">Across the Pakistan. </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- END col-3 -->
+                        <!-- BEGIN col-3 -->
+                        <div class="col-md-3 col-sm-3">
+                            <div class="step">
+                                <a href="{% url 'checkout_info' %}">
+                                    <div class="number">2</div>
+                                    <div class="info">
+                                        <div class="title">Shipping Address</div>
+                                        <div class="desc">Vivamus eleifend euismod.</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- END col-3 -->
+                        <!-- BEGIN col-3 -->
+                        <div class="col-md-3 col-sm-3">
+                            <div class="step">
+                                <a href="{% url 'checkout_payment' %}">
+                                    <div class="number">3</div>
+                                    <div class="info">
+                                        <div class="title">Payment</div>
+                                        <div class="desc">Aenean ut pretium ipsum. </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- END col-3 -->
+                        <!-- BEGIN col-3 -->
+                        <div class="col-md-3 col-sm-3">
+                            <div class="step">
+                                <a href="{% url 'checkout_complete' %}">
+                                    <div class="number">4</div>
+                                    <div class="info">
+                                        <div class="title">Complete Payment</div>
+                                        <div class="desc">Curabitur interdum libero.</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- END col-3 -->
+                    </div>
+                    <!-- END row -->
+                </div>
+                <!-- END checkout-header -->
+
+                <!-- BEGIN checkout-body -->
+                <div class="checkout-body">
+                    <div class="table-responsive">
+                        <table class="table table-cart">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th class="text-center">Original Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item in request.user.user_carts.all %}
+                                <tr>
+                                    <td class="cart-product">
+                                        <div class="product-img">
+                                            <img src="{{ cart_item.product.product_image.url }}" alt="" />
+                                        </div>
+                                        <div class="product-info">
+                                            <div class="title">{{ cart_item.product.product_name }}</div>
+                                            <div class="desc">Delivers Tue 26/04/2016 - Free</div>
+                                        </div>
+                                    </td>
+                                    <td class="cart-price text-center">{{ cart_item.product.orignal_price|intcomma }}</td>
+                                    
+                                    <td class="cart-qty text-center">
+                                        <div class="cart-qty-input">
+                                            
+                                            <a href="#" class="qty-control left" data-click="decrease-qty" data-action="decrease" data-target="{{ cart_item.id }}"><i class="fa fa-minus"></i></a>
+
+                                            <input type="text" name="qty" value="{{ cart_item.quantity }}" class="form-control" id="qty{{ cart_item.id }}" />
+
+                                            <a href="#" class="qty-control right" data-click="increase-qty" data-action="increase" data-target="{{ cart_item.id }}"><i class="fa fa-plus"></i></a>
+
+                                        </div>
+                                        <div class="qty-desc">1 to max order</div>
+                                    </td>
+                                    <td class="cart-total text-center"><strong id="item_total_{{ cart_item.id }}">{{ cart_item.product.discounted_price|intcomma }}</strong></td>
+
+
+                                </tr>
+                                {% endfor %}
+
+                                <tr>
+                                    <td class="cart-summary" colspan="4">
+                                        <div class="summary-container">
+                                            <div class="summary-row">
+                                                <div class="field">Cart Subtotal</div>
+                                                <div class="value" id="subtotal">{{ subtotal|intcomma }} ₹</div>
+
+                                            </div>
+                                            <div class="summary-row text-danger">
+                                                <div class="field">Free Shipping</div>
+                                                <div class="value">$0.00</div>
+                                            </div>
+                                            <div class="summary-row total">
+                                                <div class="field">Total</div>
+                                                <div class="value" id="total">{{ total|intcomma }} ₹</div>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- END checkout-body -->
+            </form>
+
+            <div class="checkout-footer">
+                <a href="{% url 'product' %}" class="btn btn-white btn-lg pull-left">Continue Shopping</a>
+                <button type="submit" class="btn btn-inverse btn-lg p-l-30 p-r-30 m-l-10">Checkout</button>
+            </div>
+        </div>
+        <!-- END checkout -->
+    </div>
+    <!-- END container -->
+</div>
+<!-- END #checkout-cart -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('[data-click="increase-qty"]').forEach(function(item) {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('data-target');
+            const qtyInput = document.getElementById(`qty${targetId}`);
+            const currentValue = parseInt(qtyInput.value);
+            qtyInput.value = currentValue + 1;
+            updateCart(targetId, 'increase');
+        });
+    });
+
+    document.querySelectorAll('[data-click="decrease-qty"]').forEach(function(item) {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('data-target');
+            const qtyInput = document.getElementById(`qty${targetId}`);
+            const currentValue = parseInt(qtyInput.value);
+            if (currentValue > 1) {
+                qtyInput.value = currentValue - 1;
+                updateCart(targetId, 'decrease');
+            }
+        });
+    });
+
+    function updateCart(cartItemId, action) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const formData = new FormData();
+        formData.append('action', action);  // Ensure action is appended to the form data
+        formData.append('cart_item_id', cartItemId);
+        formData.append('qty', document.getElementById(`qty${cartItemId}`).value);
+
+        fetch('add_to_cart', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update subtotal and total prices on the page
+            document.getElementById('subtotal').textContent = data.subtotal;
+            document.getElementById('total').textContent = data.total;
+
+            // Update total price of the updated item
+            const updatedItemTotal = data.item_total;
+            document.getElementById(`item_total_${cartItemId}`).textContent = updatedItemTotal;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+</script>
+
+{% endblock %}

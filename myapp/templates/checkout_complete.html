@@ -1,0 +1,117 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %} 
+
+        
+    
+                        <div class="checkout-header">
+                            <!-- BEGIN row -->
+                            <div class="row">
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step">
+                                        <a href="/checkout_cart">
+                                            <div class="number">1</div>
+                                            <div class="info">
+                                                <div class="title">Delivery Options</div>
+                                                <div class="desc">Lorem ipsum dolor sit amet.</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step">
+                                        <a href="/checkout_info">
+                                            <div class="number">2</div>
+                                            <div class="info">
+                                                <div class="title">Shipping Address</div>
+                                                <div class="desc">Vivamus eleifend euismod.</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step">
+                                        <a href="/checkout_payment">
+                                            <div class="number">3</div>
+                                            <div class="info">
+                                                <div class="title">Payment</div>
+                                                <div class="desc">Aenean ut pretium ipsum. </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step active">
+                                        <a href="#">
+                                            <div class="number">4</div>
+                                            <div class="info">
+                                                <div class="title">Complete Payment</div>
+                                                <div class="desc">Curabitur interdum libero.</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                            </div>
+                            <!-- END row -->
+                        </div>
+                        <!-- END checkout-header -->
+                        <!-- BEGIN checkout-body -->
+                        <div class="checkout-body">
+                            <!-- BEGIN checkout-message -->
+                            <div class="checkout-message">
+                                <h1>Thank you! <small>Your Payment has been successfully processed with the following details.</small></h1>
+                                <div class="table-responsive2">
+                                    <table class="table table-payment-summary">
+                                        <tbody>
+                                            <tr>
+                                                <td class="field">Transaction Status</td>
+                                                <td class="value">Success</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field">Transaction Reference No.</td>
+                                                <td class="value">REF000001</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field">Bank Authorised Code</td>
+                                                <td class="value">AUTH000001</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field">Transaction Date and Time</td>
+                                                <td class="value">05 APR 2016 07:30PM</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field">Orders</td>
+                                                <td class="value product-summary">
+                                                    <div class="product-summary-img">
+                                                        <img src="assets/img/iphone-6s-plus.png" alt="" />
+                                                    </div>
+                                                    <div class="product-summary-info">
+                                                        <div class="title">iPhone 6s Plus 16GB (Silver)</div>
+                                                        <div class="desc">Delivers Tue 26/04/2016 - Free</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field">Payment Amount (RM)</td>
+                                                <td class="value">$999.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p class="text-muted text-center m-b-0">Should you require any assistance, you can get in touch with Support Team at (123) 456-7890</p>
+                            </div>
+                            <!-- END checkout-message -->
+                        </div>
+                        <!-- END checkout-body -->
+                       
+    
+    {% endblock %}

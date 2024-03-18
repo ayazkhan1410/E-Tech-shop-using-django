@@ -1,0 +1,463 @@
+{% extends 'index.html' %}
+
+{% block title%}
+<title>{{product.product_name}}</title>
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<!-- BEGIN #product -->
+<div id="product" class="section-container p-t-20">
+  <!-- BEGIN container -->
+  <div class="container">
+    <!-- BEGIN breadcrumb -->
+    <ul class="breadcrumb m-b-10 f-s-12">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Mobile Phone</a></li>
+      <li><a href="#">Apple</a></li>
+      <li class="active">{{product.product_name}}</li>
+    </ul>
+    <!-- END breadcrumb -->
+
+    <!-- BEGIN product -->
+    <div class="product">
+      <!-- BEGIN product-detail -->
+      <div class="product-detail">
+        <!-- BEGIN product-image -->
+        <div class="product-image">
+          <!-- BEGIN product-thumbnail -->
+          <div class="product-thumbnail">
+            <ul class="product-thumbnail-list">
+              <!-- <li class="active"><a href="#" data-click="show-main-image" data-url="{{product.product_image.url}}"><img src="{{product.product_image.url}}" alt="No" /></a></li> -->
+
+              {% for feature_images in product.feature_product_images.all %}
+              <li>
+                <a href="#" data-click="show-main-image" data-url="{{feature_images.image.url}}">
+                  <img src="{{feature_images.image.url}}" alt="No" /></a>
+              </li>
+              {% endfor %}
+              
+            </ul>
+          </div>
+          <!-- END product-thumbnail -->
+
+          <!-- BEGIN product-main-image -->
+          <div class="product-main-image" data-id="main-image">
+            <img src="{{product.product_image.url}}" alt="Nothing" />
+          </div>
+
+          <!-- END product-main-image -->
+        </div>
+        <!-- END product-image -->
+
+        <!-- BEGIN product-info -->
+        <div class="product-info">
+          <!-- BEGIN product-info-header -->
+          <div class="product-info-header">
+            <h1 class="product-title">
+              <span class="label label-success">{{product.discount_percentage}} % OFF</span>
+              {{product.product_name}}
+            </h1>
+            <ul class="product-category">
+              <li><a href="#">iPhone</a></li>
+              <li><a href="#">mobile phone</a></li>
+              <li>/</li>
+              <li><a href="#">electronics</a></li>
+              <li>/</li>
+              <li><a href="#">lifestyle</a></li>
+            </ul>
+          </div>
+          <!-- END product-info-header -->
+
+          <!-- BEGIN product-warranty -->
+
+          <div class="product-warranty">
+            {% if product.is_stock%}
+            <div class="pull-right">Availability: <b>in stock</b></div>
+            {% else %}
+            <div class="pull-right">Unavaiable: <b>out stock</b></div>
+            {% endif %}
+            <div>
+              <b>{{product.warranty}} YEARS</b> Local Manufacturer Warranty
+            </div>
+          </div>
+          <!-- END product-warranty -->
+
+          <!-- BEGIN product-info-list -->
+          <ul class="product-info-list">
+            <li>
+              <i class="fa fa-circle"></i> {{product.product_description}}
+            </li>
+            <!-- <li><i class="fa fa-circle"></i> Fingerprint-resistant oleophobic coating</li>
+                                <li><i class="fa fa-circle"></i> A9 chip with 64-bit</li>
+                                <li><i class="fa fa-circle"></i> Ultrafast 4G LTE Advanced wireless</li>
+                                <li><i class="fa fa-circle"></i> New 12-megapixel iSight camera</li>
+                                <li><i class="fa fa-circle"></i> 4k video recording</li>
+                                <li><i class="fa fa-circle"></i> iOS 9 with Touch ID and Apple Pay</li> -->
+          </ul>
+       
+             
+          <!-- END product-info-list -->
+          <!-- starting of plus minus buton -->
+
+
+        
+
+            <!-- BEGIN product-purchase-container -->
+
+          <div class="product-purchase-container">
+            <div class="product-discount">
+              <span class="discount">₹{{product.orignal_price}}</span>
+            </div>
+            <div class="product-price">
+              <div class="price">₹{{product.discounted_price}}</div>
+            </div>
+            {% include "alert.html" %}
+            <a href="{% url 'checkout_cart' product.slug %}" class="btn btn-inverse btn-lg" type="submit">ADD TO CART</a>
+            
+          </div>
+          <!-- END product-purchase-container -->
+        </div>
+        <!-- END product-info -->
+      </div>
+      <!-- END product-detail -->
+
+      <!-- BEGIN product-tab -->
+      <div class="product-tab">
+        <!-- BEGIN #product-tab -->
+        <ul id="product-tab" class="nav nav-tabs">
+          <li class="active">
+            <a href="#product-desc" data-toggle="tab">Product Description</a>
+          </li>
+          <li class="">
+            <a href="#product-info" data-toggle="tab">Additional Information</a>
+          </li>
+          <li class="">
+            <a href="#product-reviews" data-toggle="tab">Rating & Reviews (5)</a>
+          </li>
+        </ul>
+        <!-- END #product-tab -->
+
+      <!-- BEGIN #product-tab-content -->
+<!-- BEGIN #product-tab-content -->
+<div id="product-tab-content" class="tab-content">
+  <!-- BEGIN #product-desc -->
+  <div class="tab-pane fade active in" id="product-desc">
+    <!-- BEGIN product-desc -->
+    {% for product_desc in product_description %}
+    <div class="product-desc">
+      {% if forloop.counter|divisibleby:2 %}
+      <div class="product-desc right ">
+      {% endif %}
+        <div class="image">
+          <img src="{{ product_desc.product_image.url }}" alt="" />
+        </div>
+        <div class="desc">
+          <h4>{{ product_desc.feature }}</h4>
+          <p>{{ product_desc.product_description }}</p>
+        </div>
+      {% if forloop.counter|divisibleby:2 %}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <!-- END product-desc -->
+  </div>
+
+          <!-- BEGIN #product-info -->
+          <div class="tab-pane fade" id="product-info">
+            <!-- BEGIN table-responsive -->
+            <div class="table-responsive">
+              <!-- BEGIN table-product -->
+              <table class="table table-product table-striped">
+                <thead>
+                  <tr>
+                    <th>Features</th>
+                    <th>{{ product.product_name }}</th>
+                    <th>{{ new_product_name }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for info in information.all %}
+                  <tr>
+                    <td>{{ info.feature }}</td>
+                    <td>{{ info.exisiting_product_description1 }}</td>
+                    <td>{{ info.new_product_description }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <!-- END table-product -->
+            </div>
+            <!-- END table-responsive -->
+          </div>
+          <!-- END #product-info -->
+
+
+          <!-- BEGIN #product-reviews -->
+          <div class="tab-pane fade" id="product-reviews">
+            <!-- BEGIN row -->
+            <div class="row row-space-30">
+              <!-- BEGIN col-7 -->
+              <div class="col-md-7">
+                <!-- BEGIN review -->
+                <div class="review">
+                  <div class="review-info">
+                    <div class="review-icon">
+                      <img src="{% static 'assets/img/user-1.jpg' %}" alt="" />
+                    </div>
+                    <div class="review-rate">
+                      <ul class="review-star">
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class=""><i class="fa fa-star-o"></i></li>
+                      </ul>
+                      (4/5)
+                    </div>
+                    <div class="review-name">Terry</div>
+                    <div class="review-date">24/05/2016 7:40am</div>
+                  </div>
+                  <div class="review-title">What does “SIM-free” mean?</div>
+                  <div class="review-message">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Morbi in imperdiet augue. Integer non aliquam eros. Cras
+                    vehicula nec sapien pretium sagittis. Pellentesque feugiat
+                    lectus non malesuada aliquam. Etiam id tortor pretium,
+                    dictum leo at, malesuada tortor.
+                  </div>
+                </div>
+                <!-- END review -->
+                <!-- BEGIN review -->
+                <div class="review">
+                  <div class="review-info">
+                    <div class="review-icon">
+                      <img src="assets/img/user-2.jpg" alt="" />
+                    </div>
+                    <div class="review-rate">
+                      <ul class="review-star">
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class=""><i class="fa fa-star-o"></i></li>
+                        <li class=""><i class="fa fa-star-o"></i></li>
+                      </ul>
+                      (3/5)
+                    </div>
+                    <div class="review-name">George</div>
+                    <div class="review-date">24/05/2016 8:40am</div>
+                  </div>
+                  <div class="review-title">
+                    When I buy iPhone from apple.com, is it tied to a carrier or
+                    does it come “unlocked”?
+                  </div>
+                  <div class="review-message">
+                    In mauris leo, maximus at pellentesque vel, pharetra vel
+                    risus. Aenean in semper velit. Pellentesque habitant morbi
+                    tristique senectus et netus et malesuada fames ac turpis
+                    egestas. Morbi volutpat mattis neque, at molestie tellus
+                    ultricies quis. Ut lobortis odio nec nunc ullamcorper, vitae
+                    faucibus augue semper. Sed luctus lobortis nulla ac
+                    volutpat. Mauris blandit scelerisque sem.
+                  </div>
+                </div>
+                <!-- END review -->
+                <!-- BEGIN review -->
+                <div class="review">
+                  <div class="review-info">
+                    <div class="review-icon">
+                      <img src="{% static 'assets/img/user-3.jpg' %}" alt="" />
+                    </div>
+                    <div class="review-rate">
+                      <ul class="review-star">
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                      </ul>
+                      (5/5)
+                    </div>
+                    <div class="review-name">Steve</div>
+                    <div class="review-date">23/05/2016 8:40am</div>
+                  </div>
+                  <div class="review-title">
+                    Where is the iPhone Upgrade Program available?
+                  </div>
+                  <div class="review-message">
+                    Duis ut nunc sem. Integer efficitur, justo sit amet feugiat
+                    hendrerit, arcu nisl elementum dui, in ultricies erat quam
+                    at mauris. Class aptent taciti sociosqu ad litora torquent
+                    per conubia nostra, per inceptos himenaeos. Donec nec
+                    ultrices tellus. Mauris elementum venenatis volutpat.
+                  </div>
+                </div>
+                <!-- END review -->
+                <!-- BEGIN review -->
+                <div class="review">
+                  <div class="review-info">
+                    <div class="review-icon">
+                      <img src="{% static 'assets/img/user-4.jpg' %}" alt="" />
+                    </div>
+                    <div class="review-rate">
+                      <ul class="review-star">
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class=""><i class="fa fa-star-o"></i></li>
+                        <li class=""><i class="fa fa-star-o"></i></li>
+                        <li class=""><i class="fa fa-star-o"></i></li>
+                      </ul>
+                      (2/5)
+                    </div>
+                    <div class="review-name">Alfred</div>
+                    <div class="review-date">23/05/2016 10.02am</div>
+                  </div>
+                  <div class="review-title">
+                    Can I keep my current service plan if I choose the iPhone
+                    Upgrade Program?
+                  </div>
+                  <div class="review-message">
+                    Donec vel fermentum quam. Vivamus scelerisque enim eget
+                    tristique auctor. Vivamus tempus, turpis iaculis tempus
+                    egestas, leo augue hendrerit tellus, et efficitur neque
+                    massa at neque. Aenean efficitur eleifend orci at ornare.
+                  </div>
+                </div>
+                <!-- END review -->
+                <!-- BEGIN review -->
+                <div class="review">
+                  <div class="review-info">
+                    <div class="review-icon">
+                      <img src="{% static 'assets/img/user-5.jpg' %}" alt="" />
+                    </div>
+                    <div class="review-rate">
+                      <ul class="review-star">
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                        <li class="active"><i class="fa fa-star"></i></li>
+                      </ul>
+                      (5/5)
+                    </div>
+                    <div class="review-name">Edward</div>
+                    <div class="review-date">22/05/2016 9.30pm</div>
+                  </div>
+                  <div class="review-title">
+                    I have an existing carrier contract or installment plan. Can
+                    I purchase with the iPhone Upgrade Program
+                  </div>
+                  <div class="review-message">
+                    Aliquam consequat ut turpis non interdum. Integer blandit
+                    erat nec sapien sollicitudin, a fermentum dui venenatis.
+                    Nullam consequat at enim et aliquet. Cras mattis turpis quis
+                    eros volutpat tristique vel a ligula. Proin aliquet leo mi,
+                    et euismod metus placerat sit amet.
+                  </div>
+                </div>
+                <!-- END review -->
+              </div>
+              <!-- END col-7 -->
+              <!-- BEGIN col-5 -->
+              <div class="col-md-5">
+                
+                <!-- BEGIN review-form -->
+                <div class="review-form">
+
+                  <form method="post">
+                    <h2>Write a review</h2>
+
+                    <div class="form-group">
+                      <label for="name"> Name <span class="text-danger">*</span></label>
+                      <input type="text" required name="name" class="form-control" id="name" />
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="email">Title <span class="text-danger">*</span></label>
+                      <input type="text" required name="email" class="form-control" id="email" />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="review">Review <span class="text-danger">*</span></label>
+                      <textarea class="form-control" required name="review" rows="8" id="review"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="email">Rating <span class="text-danger">*</span></label>
+                      <div class="rating rating-selection" data-rating="true" data-target="rating">
+                        <i class="fa fa-star-o" data-value="2"></i>
+                        <i class="fa fa-star-o" data-value="4"></i>
+                        <i class="fa fa-star-o" data-value="6"></i>
+                        <i class="fa fa-star-o" data-value="8"></i>
+                        <i class="fa fa-star-o" data-value="10"></i>
+                        <span class="rating-comment">
+                          <span class="rating-comment-tooltip">Click to rate</span>
+                        </span>
+                      </div>
+
+                      <select name="rating" class="hide">
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-inverse btn-lg">
+                      Submit Review
+                    </button>
+                  </form>
+                  
+                </div>
+                <!-- END review-form -->
+              </div>
+              <!-- END col-5 -->
+            </div>
+            <!-- END row -->
+          </div>
+          <!-- END #product-reviews -->
+        </div>
+        <!-- END #product-tab-content -->
+      </div>
+      <!-- END product-tab -->
+    </div>
+    <!-- END product -->
+
+    <!-- BEGIN similar-product -->
+   
+    <h4 class="m-b-15 m-t-30">You Might Also Like</h4>
+    <div class="row row-space-10">
+      {% for p in product1 %} {% if p.is_trending %}
+
+      <div class="col-md-2 col-sm-4">
+        <!-- BEGIN item -->
+        
+        <div class="item item-thumbnail">
+          <a href="{% url 'product_detail' p.slug  %}" class="item-image">
+            <img src="{{p.product_image.url}}" alt="" />
+            <div class="discount">{{p.discount_percentage}} %OFF</div>
+          </a>
+          <div class="item-info">
+            <h4 class="item-title">
+              <a href="{% url 'product_detail' p.slug  %}">{{p.product_name}}<br /></a>
+            </h4>
+            <p class="item-desc">{{p.product_description}}.</p>
+            <div class="item-price">₹{{p.discounted_price}}</div>
+            <div class="item-discount-price">₹{{p.orignal_price}}</div>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- END item -->
+      </div>
+      {% endfor %}
+    </div>
+    <!-- END similar-product -->
+  </div>
+  <!-- END container -->
+</div>
+<!-- END #product -->
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}   
+        
+        <!-- BEGIN #checkout-payment -->
+        <div class="section-container" id="checkout-payment">
+            <!-- BEGIN container -->
+            <div class="container">
+                <!-- BEGIN checkout -->
+                <div class="checkout">
+                    <form action="chec/kout_complete" method="POST" name="form_payment" class="form-horizontal">
+                        <!-- BEGIN checkout-header -->
+                        <div class="checkout-header">
+                            <!-- BEGIN row -->
+                            <div class="row">
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step">
+                                        <a href="/checkout_cart">
+                                            <div class="number">1</div>
+                                            <div class="info">
+                                                <div class="title">Delivery Options</div>
+                                                <div class="desc">Lorem ipsum dolor sit amet.</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step">
+                                        <a href="/checkout_info">
+                                            <div class="number">2</div>
+                                            <div class="info">
+                                                <div class="title">Shipping Address</div>
+                                                <div class="desc">Vivamus eleifend euismod.</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step active">
+                                        <a href="#">
+                                            <div class="number">3</div>
+                                            <div class="info">
+                                                <div class="title">Payment</div>
+                                                <div class="desc">Aenean ut pretium ipsum. </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                                <!-- BEGIN col-3 -->
+                                <div class="col-md-3 col-sm-3">
+                                    <div class="step">
+                                        <a href="/checkout_complete">
+                                            <div class="number">4</div>
+                                            <div class="info">
+                                                <div class="title">Complete Payment</div>
+                                                <div class="desc">Curabitur interdum libero.</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END col-3 -->
+                            </div>
+                            <!-- END row -->
+                        </div>
+                        <!-- END checkout-header -->
+                        <!-- BEGIN checkout-body -->
+                        <div class="checkout-body">
+							<h4 class="checkout-title">Choose a payment method</h4>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Cardholder Name <span class="text-danger">*</span></label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control required" name="cardholder" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Card Number <span class="text-danger">*</span></label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control required" name="cardnumber" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Payment Types <span class="text-danger">*</span></label>
+                                <div class="col-sm-8">
+                                    <ul class="list-inline payment-type">
+                                        <li class="active"><a href="#" data-click="set-payment" data-value="Paypal" data-toggle="tooltip" data-title="Paypal" data-placement="top" data-trigger="hover"><i class="fa fa-cc-paypal"></i></a></li>
+                                        <li><a href="#" data-click="set-payment" data-value="Visa" data-toggle="tooltip" data-title="Visa" data-placement="top" data-trigger="hover"><i class="fa fa-cc-visa"></i></a></li>
+                                        <li><a href="#" data-click="set-payment" data-value="Master Card" data-toggle="tooltip" data-title="Master Card" data-placement="top" data-trigger="hover"><i class="fa fa-cc-mastercard"></i></a></li>
+                                        <li><a href="#" data-click="set-payment" data-value="Credit Card" data-toggle="tooltip" data-title="Credit Card" data-placement="top" data-trigger="hover"><i class="fa fa-cc-discover"></i></a></li>
+                                    </ul>
+                                    <input type="hidden" name="payment_type" value="" data-id="payment-type" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Expiration Date <span class="text-danger">*</span></label>
+                                <div class="col-md-8">
+                                    <div class="width-100">
+                                        <div class="row row-space-0">
+                                            <div class="col-xs-5">
+                                                <input type="text" name="mm" placeholder="MM" class="form-control required p-l-5 p-r-5 text-center" />
+                                            </div>
+                                            <div class="col-xs-2 text-center">
+                                                <div class="text-muted p-t-5 m-t-2">/</div>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                <input type="text" name="yy" placeholder="YY" class="form-control required p-l-5 p-r-5 text-center" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">CSC <span class="text-danger">*</span></label>
+                                <div class="col-md-8">
+                                    <div class="width-100 pull-left m-r-10">
+                                        <input type="text" name="number" placeholder="" class="form-control required p-l-5 p-r-5 text-center" />
+                                    </div>
+                                    <a href="#" class="text-muted f-s-12 pull-left m-t-5 p-t-2"><i class="fa fa-question-circle"></i> What's this?</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END checkout-body -->
+                        <!-- BEGIN checkout-footer -->
+                        <div class="checkout-footer">
+                            <a href="/checkout_info" class="btn btn-white btn-lg pull-left">Back</a>
+                            <button type="submit" class="btn btn-inverse btn-lg p-l-30 p-r-30 m-l-10">Proceed</button>
+                        </div>
+                        <!-- END checkout-footer -->
+                    </form>
+                </div>
+                <!-- END checkout -->
+                
+                <h4 class="checkout-title m-t-30 m-b-15">Payment Frequently Asked Questions</h4>
+                <!-- BEGIN checkout-question-list -->
+                <div class="row checkout-question-list" id="checkout-faq">
+                    <!-- BEGIN col-6 -->
+                    <div class="col-md-6">
+                        <div class="clearfix">
+                            <div class="question">
+                                <a href="#checkout-faq-1" class="collapsed" data-toggle="collapse" data-parent="#checkout-faq">
+                                    <span class="dash">-</span> Is my Credit Card / Debit Card details protected?
+                                </a>   
+                            </div>
+                            <div class="answer collapse in" id="checkout-faq-1">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam hendrerit, felis vel tincidunt sodales, urna metus rutrum leo, sit amet finibus velit ante nec lacus. Cras erat nunc, pulvinar nec leo at, rhoncus elementum orci. Nullam ut sapien ultricies, gravida ante ut, ultrices nunc.
+                            </div> 
+                        </div>
+                        <div class="clearfix m-t-10">
+                            <div class="question">
+                                <a href="#checkout-faq-2" class="collapsed" data-toggle="collapse" data-parent="#checkout-faq">
+                                    <span class="dash">-</span> Can I use a Debit Card to make payment??
+                                </a>   
+                            </div>
+                            <div class="answer collapse in" id="checkout-faq-2">
+                                Curabitur vitae venenatis odio, eget molestie mauris. Nullam vitae turpis at mi consequat rutrum quis quis mi. Vestibulum imperdiet neque non libero condimentum, quis sodales magna molestie. Interdum et malesuada fames ac ante ipsum primis in faucibus. 
+                            </div> 
+                        </div>
+                        <div class="clearfix m-t-10">
+                            <div class="question">
+                                <a href="#checkout-faq-3" class="collapsed" data-toggle="collapse" data-parent="#checkout-faq">
+                                    <span class="dash">-</span> Credit Card/Debit Card transaction keep failing. Why?
+                                </a>   
+                            </div>
+                            <div class="answer collapse in" id="checkout-faq-3">
+                                Cras malesuada mi quis purus pharetra egestas. Curabitur auctor sapien est, eu porttitor velit ornare in. Fusce porta suscipit diam at placerat. Donec lobortis iaculis accumsan. Ut semper felis vel nisi aliquam facilisis.
+                            </div> 
+                        </div>
+                    </div>
+                    <!-- END col-6 -->
+                    <!-- BEGIN col-6 -->
+                    <div class="col-md-6">
+                        <div class="clearfix">
+                            <div class="question">
+                                <a href="#checkout-faq-4" class="collapsed" data-toggle="collapse" data-parent="#checkout-faq">
+                                    <span class="dash">-</span> Did not receive the Pin Code on my mobile?
+                                </a>   
+                            </div>
+                            <div class="answer collapse in" id="checkout-faq-4">
+                                Duis gravida sem eu arcu efficitur, laoreet egestas nibh posuere. Pellentesque suscipit tincidunt porttitor. Aliquam vitae massa vel justo lobortis posuere. Nulla tempor enim at auctor dignissim. Aenean sit amet venenatis odio.
+                            </div> 
+                        </div>
+                        <div class="clearfix m-t-10">
+                            <div class="question">
+                                <a href="#checkout-faq-5" class="collapsed" data-toggle="collapse" data-parent="#checkout-faq">
+                                    <span class="dash">-</span> My credit card has been charged, but my order shows failed?
+                                </a>   
+                            </div>
+                            <div class="answer collapse in" id="checkout-faq-5">
+                                Nunc consectetur tellus libero, at tempor dolor scelerisque id. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc feugiat ligula vitae tincidunt sagittis. Etiam congue ligula purus, ut fringilla ante interdum eu.
+                            </div> 
+                        </div>
+                    </div>
+                    <!-- END col-6 -->
+                </div>
+                <!-- END checkout-question-list -->
+            </div>
+            <!-- END container -->
+        </div>
+        <!-- END #checkout-payment -->
+    
+{% endblock %}
