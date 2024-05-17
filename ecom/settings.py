@@ -16,20 +16,17 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+SECRET_KEY = 'django-insecure-zuv=k@sr!sohaso=#z++2083(mdz&_9_5282a)l*9l87yk*$&c'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zuv=k@sr!sohaso=#z++2083(mdz&_9_5282a)l*9l87yk*$&c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-STRIPE_SECRET_KEY = "sk_test_51Ovj1kHMaLFgg1XNC8R80dAVvjaameuOg0zpMih1Xnd7jB4IoTyAwPc2p8v63nBEe0AmQRU5Tvp8Wzmw2SBLrNQ6009wB5KaoF"
-
-STRIPE_PUBLIC_KEY = "pk_test_51Ovj1kHMaLFgg1XNRB1Dq4uVviq4ZkJbd460w75eSyAo13efBdBJPRgOpPX3J7C8vm2u17ir3xGeq2FQphguc0R800AqslFwHv"
 
 
 # Application definition
