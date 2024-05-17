@@ -85,6 +85,7 @@
             </div>
         </div>
         <!-- END navbar-header -->
+
         <!-- BEGIN header-nav -->
         <div class="header-nav">
             <div class=" collapse navbar-collapse" id="navbar-collapse">
@@ -96,6 +97,7 @@
                             <i class="fa fa-angle-down"></i>
                             <span class="arrow top"></span>
                         </a>
+
                         <!-- BEGIN dropdown-menu -->
                         <div class="dropdown-menu p-0">
                             <!-- BEGIN dropdown-menu-container -->
@@ -106,20 +108,18 @@
 
                                     <ul class="dropdown-menu-list"> 
 
-                                        {% for c in category %}
-                                        <li><a href="{% url 'product' %}">{{ c.category }} <i class="fa fa-angle-right pull-right"></i></a></li>
+                                        {% for c in active_categories %}
+                                        
+                                        <li><a href="{% url 'product_by_category' category_name=c %}">{{ c }} </a></li>
                                         {% endfor %}
 
-                                        <!-- <li><a href="/product">Tablet <i class="fa fa-angle-right pull-right"></i></a></li>
-                                        <li><a href="/product">Laptop <i class="fa fa-angle-right pull-right"></i></a></li>
-                                        <li><a href="/product">Desktop <i class="fa fa-angle-right pull-right"></i></a></li>
-                                        <li><a href="/product">TV <i class="fa fa-angle-right pull-right"></i></a></li>
-                                        <li><a href="/product">Speaker <i class="fa fa-angle-right pull-right"></i></a></li>
-                                        <li><a href="/product">Gadget <i class="fa fa-angle-right pull-right"></i></a></li> -->
+
                                     </ul>
-                               
+                            
                                 </div>
+
                                 <!-- END dropdown-menu-sidebar -->
+
                                 <!-- BEGIN dropdown-menu-content -->
                                 <div class="dropdown-menu-content">
                                     <h4 class="title">Shop By Popular Phone</h4>
@@ -187,19 +187,16 @@
 
 
                         <ul class="dropdown-menu">
-                            {% for c in category %}
-                            <li><a href="{% url 'product' %}">{{c.category}}</a></li>
+
+                            {% for c in active_categories %}
+                                        
+                            <li><a href="{% url 'product_by_category' category_name=c %}">{{ c }} </a></li>
                             {% endfor %}
-                            <!-- <li><a href="/product">Tablet</a></li>
-                            <li><a href="/product">TV</a></li>
-                            <li><a href="/product">Desktop</a></li>
-                            <li><a href="/product">Laptop</a></li>
-                            <li><a href="/product">Speaker</a></li>
-                            <li><a href="/product">Gadget</a></li> -->
+
                         </ul>
                     </li>
 
-                    <li><a href="/product">New Arrival</a></li>
+                    <li><a href="{% url 'new-arrival' %}">New Arrival</a></li>
                     <li class="dropdown dropdown-hover">
                         <a href="#" data-toggle="dropdown">
                             Pages
@@ -211,7 +208,7 @@
                             <li><a href="/">Home (Default)</a></li>
                             <li><a href="/search_results">Search Results</a></li>
                             <li><a href="/product">Product Page</a></li>
-                            <li><a href="/product_detail">Product Details Page</a></li>
+                            <!-- <li><a href="/product-detail">Product Details Page</a></li> -->
                             <li><a href="/checkout_cart">Checkout Cart</a></li>
                             <li><a href="/checkout_info">Checkout Shipping</a></li>
                             <li><a href="checkout_payment">Checkout Payment</a></li>
@@ -265,8 +262,14 @@
                             <h4 class="cart-title">Cart Items  </h4>
                         </div>
                         <div class="cart-body">
+                         
+                            {% if request.user.get_cart_count == 0 %}
+                            <h4 class="cart-title
+                            ">No Items in Cart</h4>
+                            {% else %}
 
                             {% for cart_items in request.user.user_carts.all %}
+                           
                             <ul class="cart-item">
                                 <li>
                                     <div class="cart-item-image"><img src="{{cart_items.product.product_image.url}}" alt="" /></div>
@@ -285,6 +288,11 @@
 
                             </ul>
                             {% endfor %}
+
+                           
+                            {% endif %}
+                         
+
                         </div>
                                 <!-- <li>
                                     <div class="cart-item-image"><img src="{% static  'assets/img/imac.jpg' %}" alt="" /></div>
@@ -317,7 +325,7 @@
                                 </div>
 
                                 <div class="col-xs-6">
-                                    <a href="{% url 'checkout_info' %}" class="btn btn-inverse btn-block">Checkout</a>
+                                    <a href="{% url 'product' %}" class="btn btn-inverse btn-block">Continue Shopping</a>
                                 </div>
                             </div>
                         </div>
@@ -431,11 +439,12 @@
                         <div class="subscription">
                             <div class="subscription-intro">
                                 <h4> LET'S STAY IN TOUCH</h4>
+                                
                                 <p>Get updates on sales specials and more</p>
                             </div>
                             <div class="subscription-form">
-                                <form name="subscription_form" action="/" method="POST">
-                                    
+                                <form name="subscription_form" action="{% url 'home' %}" method="POST">
+                                    {% csrf_token %}
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="email" placeholder="Enter Email Address" />
                                         <div class="input-group-btn">
@@ -460,10 +469,9 @@
 
                             <div class="social-list">
                                 <a href="https://www.facebook.com/StudywithAyaz"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-dribbble"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                <a href="https://twitter.com/cgpa2pointzero"><i class="fa fa-twitter"></i></a>
+                                <a href="https://www.instagram.com/study_withayaz"><i class="fa fa-instagram"></i></a>
+                                <a href="https://www.youtube.com/@studywithayaz"><i class="fa fa-google-plus"></i></a>
                             </div>
                         </div>
                         <!-- END social -->
@@ -486,11 +494,9 @@
                     <div class="col-md-3">
                         <h4 class="footer-header">ABOUT US</h4>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec tristique dolor, ac efficitur velit. Nulla lobortis tempus convallis. Nulla aliquam lectus eu porta pulvinar. Mauris semper justo erat. 
+                            i am  Ayaz Khan: a passionate BS(IT) student currently in his 8th semester, and also an intern at Enigmatix. I am more than just a student; i am a dedicated educator with my own YouTube channel name 'Study with Ayaz', where i shares valuable educational content. With a commitment to learning and teaching, I brings a unique perspective to our team at Enigmatix
                         </p>
-                        <p>
-                            Vestibulum porttitor lorem et vestibulum pharetra. Phasellus sit amet mi congue, hendrerit mi ut, dignissim eros.
-                        </p>
+                     
                     </div>
                     <!-- END col-3 -->
                     <!-- BEGIN col-3 -->
@@ -508,61 +514,43 @@
                         </ul>
                     </div>
                     <!-- END col-3 -->
-                    <!-- BEGIN col-3 -->
-                    <div class="col-md-3">
-                        <h4 class="footer-header">LATEST PRODUCT</h4>
-                        <ul class="list-unstyled list-product">
-                            <li>
-                                <div class="image">
-                                    <img src="{% static 'assets/img/iphone-6s.jpg' %}" alt="" />
-                                </div>
-                                <div class="info">
-                                    <h4 class="info-title">Iphone 6s</h4>
-                                    <div class="price">$1200.00</div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="image">
-                                    <img src="{% static 'assets/img/galaxy-s6.jpg' %}" alt="" />
-                                </div>
-                                <div class="info">
-                                    <h4 class="info-title">Samsung Galaxy s7</h4>
-                                    <div class="price">$850.00</div>
-                                </div>
-                            </li>
-                        
-                            <li>
-                                <div class="image">
-                                    <img src="{% static 'assets/img/ipad-pro.jpg' %}" alt="" />
-                                </div>
-                                <div class="info">
-                                    <h4 class="info-title">Ipad Pro</h4>
-                                    <div class="price">$800.00</div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="image">
-                                    <img src="{% static 'assets/img/galaxy-note5.jpg' %}" alt="" />
-                                </div>
-                                <div class="info">
-                                    <h4 class="info-title">Samsung Galaxy Note 5</h4>
-                                    <div class="price">$1200.00</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+
+                  <!-- BEGIN col-3 -->
+
+        <div class="col-md-3">
+    <h4 class="footer-header">LATEST PRODUCT</h4>
+    <ul class="list-unstyled list-product">
+
+        {% for item in latest_products %}
+        <li>
+            <div class="image">
+                <a href="{% url 'product_detail' item.slug %}" class="item-image">
+                    <img src="{{ item.product_image.url }}" alt="{{ item.product_name }}" />
+                </a>
+            </div>
+
+            <div class="info">
+                <h4 class="info-title">{{ item.product_name }}</h4>
+                <div class="price">Rs. {{ item.discounted_price }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
                     <!-- END col-3 -->
+
                     <!-- BEGIN col-3 -->
                     <div class="col-md-3">
                         <h4 class="footer-header">OUR CONTACT</h4>
                         <address>
-                            <strong>Twitter, Inc.</strong><br />
-                            1355 Market Street, Suite 900<br />
-                            San Francisco, CA 94103<br /><br />
-                            <abbr title="Phone">Phone:</abbr> (123) 456-7890<br />
-                            <abbr title="Fax">Fax:</abbr> (123) 456-7891<br />
-                            <abbr title="Email">Email:</abbr> <a href="mailto:sales@myshop.com">sales@myshop.com</a><br />
-                            <abbr title="Skype">Skype:</abbr> <a href="skype:myshop">myshop</a>
+                            <strong>E-Tech Shop, Inc.</strong><br />
+                           Trade Center <br />
+                            Bahawalpur<br /><br />
+                            <abbr title="Phone">Phone:</abbr> (92) 326487214<br />
+                            <abbr title="Fax">Fax:</abbr> (92) 326487215<br />
+                            <abbr title="Email">Email: </abbr> rzxgraphics@gmail.com<br />
+                           
                         </address>
                     </div>
                     <!-- END col-3 -->

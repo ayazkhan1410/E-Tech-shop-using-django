@@ -1,6 +1,68 @@
 {% extends 'index.html' %}
-{% block content %}
 {% load static %}
-<h1> Order tracking is in progress!! </h1>
+{% block title %}<title>Order Tracking</title>{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-r0GzC2frvfuvnaZZVk8Xgiyl/uN+hARaV/titNmvllpaZ2F/0wopd6oTlgkzcz8Qfe5MpRzPqnFsqMMcOefLcg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    .order-tracking-form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Adjust shadow size */
+        margin-top: 20px; /* Adjust margin from the top */
+        margin-bottom: 20px; /* Add margin from the bottom */
+    }
+
+    .form-control:focus {
+        border-color: #f05a00;
+        box-shadow: 0 0 0 0.2rem rgba(240, 90, 0, 0.25);
+    }
+
+    .btn-primary {
+        background-color: #f05a00;
+        border-color: #f05a00;
+    }
+
+    .btn-primary:hover {
+        background-color: #d94b00;
+        border-color: #d94b00;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3"></div> <!-- Empty column for centering -->
+        <div class="col-md-6">
+            <div class="order-tracking-form">
+                <h2 class="text-center mb-4">Order Tracking</h2>
+                <p class="text-center">Enter tracking ID to track your order.</p>
+                <hr>
+                {% if messages %}
+                <div class="alert alert-warning" role="">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form action="{% url 'order_tracking' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="tracking-id">Tracking ID</label>
+                        <input type="text" required name="order_id" class="form-control" id="tracking-id" placeholder="Enter your tracking ID">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-search"></i> Track Order
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
 
 {% endblock %}

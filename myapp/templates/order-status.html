@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+
+{% block title %}
+<title>Order Status</title>
+{% endblock %}
+
+{% block content %}
+{% load humanize %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Order Status</h2>
+            <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Order ID</th>
+                            <th>Product Name</th>
+                            <th>Product Quantity</th>
+                            <th>Product Price</th>
+                            <th>Order Date</th>
+                            <th>Delivery Date</th>
+                            <th>Actions</th>
+                            <th>Order Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ item.order_id }}</td>
+                            <td>{{ item.product.product_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>Rs. {{ item.total_price|intcomma }}</td>
+                            <td>{{ item.created_at | date:"d M Y" }}</td>
+                            <td>{{ delivery_date | date:"d M Y" }}</td>
+                            <td>
+                                {% if item.order_status < 4 %}
+                                <a href="#" class="btn btn-danger">Cancel Order</a>
+                                {% elif item.order_status == 4 %}
+                                <a href="#" class="btn btn-warning">Return Order</a>
+                                {% elif item.order_status == 5 %}
+                                <p class="text-success">Order Cancelled</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'order_progress' pid=item.id %}" class="btn btn-primary"
+                                    title="Track Status">Click Here!</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

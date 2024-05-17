@@ -8,7 +8,8 @@
             <div class="container">
                 <!-- BEGIN checkout -->
                 <div class="checkout">
-                    <form action="che/ckout_payment" method="POST" name="form_shipping" class="form-horizontal">
+                    <form action="{% url 'checkout_info' %}" method="POST" name="form_shipping" class="form-horizontal">
+                        {% csrf_token %}
                         <!-- BEGIN checkout-header -->
                         <div class="checkout-header">
                             <!-- BEGIN row -->
@@ -19,8 +20,8 @@
                                         <a href="{% url 'add_to_cart' %}">
                                             <div class="number">1</div>
                                             <div class="info">
-                                                <div class="title">Delivery Options</div>
-                                                <div class="desc">Lorem ipsum dolor sit amet.</div>
+                                                <div class="title">Free Delivery</div>
+                                                <div class="desc">Enjoy free delivery across Pakistan. No minimum purchase required.</div>
                                             </div>
                                         </a>
                                     </div>
@@ -33,7 +34,7 @@
                                             <div class="number">2</div>
                                             <div class="info">
                                                 <div class="title">Shipping Address</div>
-                                                <div class="desc">Vivamus eleifend euismod.</div>
+                                                <div class="desc">Provide your shipping address so we can deliver your order securely.</div>
                                             </div>
                                         </a>
                                     </div>
@@ -46,7 +47,7 @@
                                             <div class="number">3</div>
                                             <div class="info">
                                                 <div class="title">Payment</div>
-                                                <div class="desc">Aenean ut pretium ipsum. </div>
+                                                <div class="desc">Choose your preferred payment method to complete your order. </div>
                                             </div>
                                         </a>
                                     </div>
@@ -59,7 +60,7 @@
                                             <div class="number">4</div>
                                             <div class="info">
                                                 <div class="title">Complete Payment</div>
-                                                <div class="desc">Curabitur interdum libero.</div>
+                                                <div class="desc">Review your order details and complete the payment process.</div>
                                             </div>
                                         </a>
                                     </div>
@@ -69,40 +70,52 @@
                             <!-- END row -->
                         </div>
                         <!-- END checkout-header -->
+                        
                         <!-- BEGIN checkout-body -->
                         <div class="checkout-body">
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     First Name <span class="text-danger">*</span>
                                 </label>
+
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="first_name" value="" placeholder="" />
                                 </div>
+
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     Last Name <span class="text-danger">*</span>
                                 </label>
+
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="last_name" value="" placeholder="" />
                                 </div>
+
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     Company Name (optional)<span class="text-danger">&nbsp;</span>
                                 </label>
+
                                 <div class="col-md-8">
                                     <input type="text" class="form-control" name="company_name" value="" placeholder="" />
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     Area Code <span class="text-danger">*</span>
                                 </label>
+
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" name="area_code" value="" placeholder="" />
                                 </div>
+
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     Primary Phone <span class="text-danger">*</span>
@@ -111,29 +124,33 @@
                                     <input type="text" class="form-control" name="primary_phone" value="" placeholder="" />
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     Street Address <span class="text-danger">*</span>
                                 </label>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control m-b-10" name="address_1" value="" placeholder="" />
-                                    <input type="text" class="form-control" name="address_2" value="" placeholder="" />
+                                    <input type="text" class="form-control m-b-10" name="street_address" value="" placeholder="" />
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     ZIP Code<span class="text-danger">*</span>
                                 </label>
+                                
                                 <div class="col-md-4">
+                                    
                                     <input type="text" class="form-control" name="zip_code" value="" placeholder="" />
-                                    <p class="help-block m-b-0">Enter ZIP for City and State ZIP Code</p>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="control-label col-md-4">
                                     &nbsp;
                                 </label>
-                                <div class="col-md-4">
+
+                                <!-- <div class="col-md-4">
                                     <label class="f-w-500">
                                         <input type="checkbox" name="business_address" value="1" />
                                         This is a business address
@@ -141,9 +158,11 @@
                                             <i class="fa fa-question-circle"></i>
                                         </a>
                                     </label>
-                                </div>
+                                </div> -->
+
                             </div>
-                            <hr />
+
+                            <hr>
                             <div class="m-b-5"><b>Shipping Policy</b></div>
                             <ul class="checkout-info-list">
                                 <li>Signature may be required for delivery</li>

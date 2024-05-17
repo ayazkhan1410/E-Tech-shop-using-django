@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.conf import settings
 from django.core.mail import send_mail
+
 class Manager(BaseUserManager):
     def create_user(self, email, password = None, **extra_fields):
         if not email:

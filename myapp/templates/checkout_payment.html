@@ -1,14 +1,18 @@
 {% extends 'index.html' %}
+
+
 {% block content %}
+
 {% load static %}   
-        
+<script src="https://js.stripe.com/v3/"></script>
         <!-- BEGIN #checkout-payment -->
+        
         <div class="section-container" id="checkout-payment">
             <!-- BEGIN container -->
             <div class="container">
                 <!-- BEGIN checkout -->
                 <div class="checkout">
-                    <form action="chec/kout_complete" method="POST" name="form_payment" class="form-horizontal">
+
                         <!-- BEGIN checkout-header -->
                         <div class="checkout-header">
                             <!-- BEGIN row -->
@@ -16,7 +20,7 @@
                                 <!-- BEGIN col-3 -->
                                 <div class="col-md-3 col-sm-3">
                                     <div class="step">
-                                        <a href="/checkout_cart">
+                                        <a href="{% url 'add_to_cart' %}">
                                             <div class="number">1</div>
                                             <div class="info">
                                                 <div class="title">Delivery Options</div>
@@ -29,7 +33,7 @@
                                 <!-- BEGIN col-3 -->
                                 <div class="col-md-3 col-sm-3">
                                     <div class="step">
-                                        <a href="/checkout_info">
+                                        <a href="{% url 'checkout_info' %}">
                                             <div class="number">2</div>
                                             <div class="info">
                                                 <div class="title">Shipping Address</div>
@@ -69,9 +73,9 @@
                             <!-- END row -->
                         </div>
                         <!-- END checkout-header -->
-                        <!-- BEGIN checkout-body -->
+                        {% include 'alert.html' %}
                         <div class="checkout-body">
-							<h4 class="checkout-title">Choose a payment method</h4>
+                            <h4 class="checkout-title">Choose a payment method</h4>
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Cardholder Name <span class="text-danger">*</span></label>
                                 <div class="col-md-4">
@@ -84,18 +88,8 @@
                                     <input type="text" class="form-control required" name="cardnumber" placeholder="" />
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">Payment Types <span class="text-danger">*</span></label>
-                                <div class="col-sm-8">
-                                    <ul class="list-inline payment-type">
-                                        <li class="active"><a href="#" data-click="set-payment" data-value="Paypal" data-toggle="tooltip" data-title="Paypal" data-placement="top" data-trigger="hover"><i class="fa fa-cc-paypal"></i></a></li>
-                                        <li><a href="#" data-click="set-payment" data-value="Visa" data-toggle="tooltip" data-title="Visa" data-placement="top" data-trigger="hover"><i class="fa fa-cc-visa"></i></a></li>
-                                        <li><a href="#" data-click="set-payment" data-value="Master Card" data-toggle="tooltip" data-title="Master Card" data-placement="top" data-trigger="hover"><i class="fa fa-cc-mastercard"></i></a></li>
-                                        <li><a href="#" data-click="set-payment" data-value="Credit Card" data-toggle="tooltip" data-title="Credit Card" data-placement="top" data-trigger="hover"><i class="fa fa-cc-discover"></i></a></li>
-                                    </ul>
-                                    <input type="hidden" name="payment_type" value="" data-id="payment-type" />
-                                </div>
-                            </div>
+                           
+
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Expiration Date <span class="text-danger">*</span></label>
                                 <div class="col-md-8">
@@ -118,21 +112,29 @@
                                 <label class="col-md-4 control-label">CSC <span class="text-danger">*</span></label>
                                 <div class="col-md-8">
                                     <div class="width-100 pull-left m-r-10">
-                                        <input type="text" name="number" placeholder="" class="form-control required p-l-5 p-r-5 text-center" />
+                                        <input type="text" name="csc" placeholder="" class="form-control required p-l-5 p-r-5 text-center" />
                                     </div>
                                     <a href="#" class="text-muted f-s-12 pull-left m-t-5 p-t-2"><i class="fa fa-question-circle"></i> What's this?</a>
                                 </div>
                             </div>
                         </div>
-                        <!-- END checkout-body -->
+
+
                         <!-- BEGIN checkout-footer -->
                         <div class="checkout-footer">
                             <a href="/checkout_info" class="btn btn-white btn-lg pull-left">Back</a>
+
+                            <form action="{% url 'checkout_payment' %}" method="post">
+                                {% csrf_token %}
                             <button type="submit" class="btn btn-inverse btn-lg p-l-30 p-r-30 m-l-10">Proceed</button>
+                            
+                            </form>
                         </div>
                         <!-- END checkout-footer -->
-                    </form>
                 </div>
+
+
+
                 <!-- END checkout -->
                 
                 <h4 class="checkout-title m-t-30 m-b-15">Payment Frequently Asked Questions</h4>
@@ -202,5 +204,72 @@
             <!-- END container -->
         </div>
         <!-- END #checkout-payment -->
-    
+<script>
+
+
+        const stripe = Stripe("pk_test_51Ovj1kHMaLFgg1XNRB1Dq4uVviq4ZkJbd460w75eSyAo13efBdBJPRgOpPX3J7C8vm2u17ir3xGeq2FQphguc0R800AqslFwHv");
+        const elements = stripe.elements();
+        
+        const style = {
+          base: {
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+              color: '#aab7c4'
+            }
+          },
+          invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+          }
+        };
+        
+        const card = elements.create('card', { style });
+        card.mount('#card-element');
+        
+        card.on('change', (event) => {
+          const displayError = document.getElementById('card-errors');
+          if (event.error) {
+            displayError.textContent = event.error.message;
+          } else {
+            displayError.textContent = '';
+          }
+        });
+        
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+        
+          try {
+            const { token } = await stripe.createToken(card);
+        
+            if (token.error) {
+              const errorElement = document.getElementById('card-errors');
+              errorElement.textContent = token.error.message;
+              return; // Prevent form submission if token creation fails
+            }
+        
+            // Send the token to your server for processing
+            stripeTokenHandler(token);
+          } catch (error) {
+            console.error('An error occurred:', error);
+            // Handle errors appropriately, e.g., display an error message to the user
+          }
+        });
+        
+        function stripeTokenHandler(token) {
+          const form = document.getElementById('payment-form');
+          const hiddenInput = document.createElement('input');
+          hiddenInput.setAttribute('type', 'hidden');
+          hiddenInput.setAttribute('name', 'stripeToken');
+          hiddenInput.setAttribute('value', token.id);
+          form.appendChild(hiddenInput);
+        
+          form.submit();
+        }
+    </script>
 {% endblock %}
+
+

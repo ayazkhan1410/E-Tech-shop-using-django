@@ -1,8 +1,8 @@
 {% extends 'index.html' %}
-
-{% block content %}
-{% load static %}   
-
+    {% block content %}
+        {% load static %}   
+        {% load humanize %}
+    
         <!-- BEGIN #slider -->
         <div id="slider" class="section-container p-0 bg-black-darker">
             <!-- BEGIN carousel -->
@@ -19,12 +19,13 @@
                             <div class="container">
                                 <h3 class="title m-b-5 fadeInLeftBig animated">iMac</h3> 
                                 <p class="m-b-15 fadeInLeftBig animated">Retina. Now in colossal and ginormous.</p>
-                                <div class="price m-b-30 fadeInLeftBig animated"><small>from</small> <span>$649.00</span></div>
-                                <a href="#" class="btn btn-outline btn-lg fadeInLeftBig animated">Buy Now</a>
+                                <div class="price m-b-30 fadeInLeftBig animated"><small>from</small> <span>Rs.1399</span></div>
+                                <a href="product_detail/imac-z0vy000d7" class="btn btn-outline btn-lg fadeInLeftBig animated">Buy Now</a>
                             </div>
                         </div>
                     </div>
                     <!-- END item -->
+                    
                     <!-- BEGIN item -->
                     <div class="item">
                         <img src="{% static 'assets/img/slider-2-cover.jpg' %}" class="bg-cover-img" alt="" />
@@ -35,8 +36,8 @@
                             <div class="container">
                                 <h3 class="title m-b-5 fadeInRightBig animated">iPhone 6s</h3> 
                                 <p class="m-b-15 fadeInRightBig animated">The only thing that’s changed is everything</p>
-                                <div class="price m-b-30 fadeInRightBig animated"><small>from</small> <span>$1,299.00</span></div>
-                                <a href="#" class="btn btn-outline btn-lg fadeInRightBig animated">Buy Now</a>
+                                <div class="price m-b-30 fadeInRightBig animated"><small>from</small> <span>Rs.13,500</span></div>
+                                <a href="/product_detail/apple-iphone-6s" class="btn btn-outline btn-lg fadeInRightBig animated">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -48,8 +49,8 @@
                             <div class="container">
                                 <h3 class="title m-b-5 fadeInDownBig animated">Macbook Air</h3> 
                                 <p class="m-b-15 fadeInDownBig animated">Thin.Light.Powerful.<br />And ready for anything</p>
-                                <div class="price fadeInDownBig animated"><small>from</small> <span>$999.00</span></div>
-                                <a href="#" class="btn btn-outline btn-lg fadeInUpBig animated">Buy Now</a>
+                                <div class="price fadeInDownBig animated"><small>from</small> <span>Rs.47</span></div>
+                                <a href="product_detail/iphone-6s" class="btn btn-outline btn-lg fadeInUpBig animated">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -73,7 +74,7 @@
             <div class="container">
                 <!-- BEGIN section-title -->
                 <h4 class="section-title clearfix">
-                    <a href="#" class="pull-right">SHOW ALL</a>
+                    <a href="{% url 'product' %}" class="pull-right">SHOW ALL</a>
                     Exclusive promotions
                     <small>from 25 September 2016 - 1 January 2017</small>
                 </h4>
@@ -89,7 +90,7 @@
                             </div>
                             <div class="promotion-caption promotion-caption-inverse">
                                 <h4 class="promotion-title">iPhone SE</h4>
-                                <div class="promotion-price"><small>from</small> $299.00</div>
+                                <div class="promotion-price"><small>from</small> Rs.299.00</div>
                                 <p class="promotion-desc">A big step for small.<br />A beloved design. Now with more to love.</p>
                                 <a href="#" class="promotion-btn">View More</a>
                             </div>
@@ -106,7 +107,7 @@
                             </div>
                             <div class="promotion-caption promotion-caption-inverse text-right">
                                 <h4 class="promotion-title">Apple Watch</h4>
-                                <div class="promotion-price"><small>from</small> $299.00</div>
+                                <div class="promotion-price"><small>from</small> Rs.299.00</div>
                                 <p class="promotion-desc">You. At a glance.</p>
                                 <a href="#" class="promotion-btn">View More</a>
                             </div>
@@ -119,14 +120,17 @@
                             </div>
                             <div class="promotion-caption text-center">
                                 <h4 class="promotion-title">Mac Mini</h4>
-                                <div class="promotion-price"><small>from</small> $199.00</div>
+                                <div class="promotion-price"><small>from</small> Rs.199.00</div>
                                 <p class="promotion-desc">It’s mini in a massive way.</p>
                                 <a href="#" class="promotion-btn">View More</a>
                             </div>
                         </div>
                         <!-- END promotion -->
-                    </div>
+                   
+    
+     </div>
                     <!-- END col-3 -->
+    
                     <!-- BEGIN col-3 -->
                     <div class="col-md-3 col-sm-6">
                         <!-- BEGIN promotion -->
@@ -136,7 +140,7 @@
                             </div>
                             <div class="promotion-caption text-center">
                                 <h4 class="promotion-title">Apple Accessories</h4>
-                                <div class="promotion-price"><small>from</small> $99.00</div>
+                                <div class="promotion-price"><small>from</small> Rs.99.00</div>
                                 <p class="promotion-desc">Redesigned. Rechargeable. Remarkable.</p>
                                 <a href="#" class="promotion-btn">View More</a>
                             </div>
@@ -149,7 +153,7 @@
                             </div>
                             <div class="promotion-caption promotion-caption-inverse">
                                 <h4 class="promotion-title">Mac Pro</h4>
-                                <div class="promotion-price"><small>from</small> $1,299.00</div>
+                                <div class="promotion-price"><small>from</small> Rs.1,299.00</div>
                                 <p class="promotion-desc">Built for creativity on an epic scale.</p>
                                 <a href="#" class="promotion-btn">View More</a>
                             </div>
@@ -164,225 +168,214 @@
         </div>
         <!-- END #promotions -->
     
-       <!-- BEGIN #trending-items -->
-<div id="trending-items" class="section-container bg-silver">
-    <!-- BEGIN container -->
-    <div class="container">
-        <!-- BEGIN section-title -->
-        <h4 class="section-title clearfix">
-            <a href="#" class="pull-right m-l-5"><i class="fa fa-angle-right f-s-18"></i></a>
-            <a href="#" class="pull-right"><i class="fa fa-angle-left f-s-18"></i></a>
-            Trending Items
-            <small>Shop and get your favourite items at amazing prices!</small>
-        </h4>
-        <!-- END section-title -->
-        
-        <!-- BEGIN row -->
-        <div class="row row-space-10">
-            {% for p in product %}
-            {% if p.is_trending %}
-            <!-- BEGIN col-2 -->
-            <div class="col-md-2 col-sm-4">
-                <!-- BEGIN item -->                    
-                <div class="item item-thumbnail">
-                    <a href="{% url 'product_detail' p.slug %}" class="item-image">
-                        <img src="media/{{ p.product_image }}" alt="" />
-                        <div class="discount">{{ p.discount_percentage }}% OFF</div>
-                    </a>
-                    <div class="item-info">
-                        <h4 class="item-title">
-                            <a href="{% url 'product_detail' p.slug %}">{{ p.product_name }}<br /></a>
-                        </h4>
-                        <p class="item-desc">{{ p.product_description }}.</p>
-                        <div class="item-price">₹{{ p.discounted_price }}</div>
-                        <div class="item-discount-price">₹{{p.orignal_price}}</div>
-                    </div>           
-                </div>
-                <!-- END item -->
-            </div>
-            <!-- END col-2 -->
-            {% endif %}
-            {% endfor %}
-        </div>
-        <!-- END row -->
-    </div>
-    <!-- END container -->
-</div>
-<!-- END #trending-items -->
-
-    
-        <!-- BEGIN #mobile-list -->
-        <div id="mobile-list" class="section-container bg-silver p-t-0">
+        <!-- BEGIN #trending-items -->
+        <div id="trending-items" class="section-container bg-silver">
             <!-- BEGIN container -->
             <div class="container">
                 <!-- BEGIN section-title -->
                 <h4 class="section-title clearfix">
-                    <a href="#" class="pull-right">SHOW ALL</a>
-                    Mobile Phones
-                    <small>Shop and get your favourite phone at amazing prices!</small>
+                    <a href="#" class="pull-right m-l-5"><i class="fa fa-angle-right f-s-18"></i></a>
+                    <a href="#" class="pull-right"><i class="fa fa-angle-left f-s-18"></i></a>
+                    Trending Items
+                    <small>Shop and get your favourite items at amazing prices!</small>
                 </h4>
                 <!-- END section-title -->
-
-                <!-- BEGIN category-container -->
-<div class="category-container">
-    <!-- BEGIN category-sidebar -->
-    <div class="category-sidebar">
-        <ul class="category-list">
-            <li class="list-header">Top Categories</li>
-            {% for m in company_brand %}
-            <li><a href="">{{m}}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    <!-- END category-sidebar -->
-    
-    <!-- BEGIN category-detail -->
-    <div class="category-detail">
-        <!-- BEGIN category-item -->
-        <a href="#" class="category-item full">
-            <div class="item">
-                <div class="item-cover">
-                    <img src="{% static 'assets/img/samsung-s7-edge.jpg' %}" alt="" />
-                </div>
-                <div class="item-info bottom">
-                    <h4 class="item-title">Samsung Galaxy s7 Edge + Geat 360 + Gear VR</h4>
-                    <p class="item-desc">Redefine what a phone can do</p>
-                    <div class="item-price">$799.00</div>
-                </div>
-            </div>
-        </a>
-        <!-- END category-item -->
-
-        <!-- BEGIN category-item -->
-        <div class="category-item list">
-            <!-- BEGIN item-row -->
-            <div class="item-row">
-                {% for i in product1 %}
-                {% if i.category.category == "Mobile Phones" %}
-                {% if i.is_trending == False %}
-                <!-- BEGIN item -->
-                <div class="item item-thumbnail">
-                    <a href="{% url 'product_detail' i.slug %}" class="item-image">
-                        <img src="media/{{ i.product_image }}" alt="" />
-                        <div class="discount">{{ i.discount_percentage }} %off</div>
-                    </a>
-                    <div class="item-info">
-                        <h4 class="item-title">
-                            <a href="{% url 'product_detail' i.slug %}">{{ i.product_name }}<br /></a>
-                        </h4>
-                        <p class="item-desc">{{ i.product_description }}.</p>
-                        <div class="item-price">₹{{ i.discounted_price }}</div>
-                        <div class="item-discount-price">₹{{ i.orignal_price }}</div>
-                    </div>
-               
-                </div>
-                {% endif %}
-                {% endif %}    
-            {% endfor %}
-            
-                </div>
-            <!-- END item-row -->
-            </div>
-        <!-- END category-item -->
-        </div>
-    <!-- END category-detail -->
-        </div>
-    </div>
-</div>
-
-<!-- END category-container -->
-
-
-    
-            <!-- END container -->
-        <!-- END #mobile-list -->
-    
-
-      <!-- BEGIN #tablet-list -->
-      <div id="tablet-list" class="section-container bg-silver p-t-0">
-        <!-- BEGIN container -->
-        <div class="container">
-            <!-- BEGIN section-title -->
-            <h4 class="section-title clearfix">
-                <a href="#" class="pull-right">SHOW ALL</a>
-                Tablet
-                <small>Shop and get your favourite tablet at amazing prices!</small>
-            </h4>
-            <!-- END section-title -->
-            <!-- BEGIN category-container -->
-            <div class="category-container">
-                <!-- BEGIN category-sidebar -->
-                <div class="category-sidebar">
-                    <ul class="category-list">
-                       
-                        <li class="list-header">Top Categories</li>
-                        {% for t in tab_brand %} 
-                        <li><a href="#">{{t}}</a></li>
-                        {% endfor %}
-                        <!-- <li><a href="#">HP</a></li>
-                        <li><a href="#">Huawei</a></li>
-                        <li><a href="#">Samsung</a></li>
-                        <li><a href="#">Sony</a></li>
-                        <li><a href="#">All Brands</a></li> -->
-                    </ul>
                 
-
-                </div>
-                <!-- END category-sidebar -->
-                <!-- BEGIN category-detail -->
-                <div class="category-detail">
-                    <!-- BEGIN category-item -->
-                    <a href="#" class="category-item full">
-                        <div class="item">
-                            <div class="item-cover">
-                                <img src="{% static 'assets/img/huawei-mediapad.jpg' %}" alt="" />
-                            </div>
-                            <div class="item-info bottom">
-                                <h4 class="item-title">Huawei MediaPad T1 7.0</h4>
-                                <p class="item-desc">Vibrant colors. Beautifully displayed</p>
-                                <div class="item-price">$299.00</div>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- END category-item -->
-
-                    <!-- BEGIN category-item -->
-                    <div class="category-item list">
-                        <!-- BEGIN item-row -->
-                        <div class="item-row">
-                            {% for tablet in product %}
-                            {% if tablet.category.category == 'Tablet' %}
-                            <!-- BEGIN item -->
+                <!-- BEGIN row -->
+                <div class="row row-space-10">
+                    {% for p in trending_products %}
+                    {% if p.is_trending %}
+                        <!-- BEGIN col-2 -->
+                        <div class="col-md-2 col-sm-4">
+                            <!-- BEGIN item -->                    
                             <div class="item item-thumbnail">
-                                <a href="{% url 'product_detail' tablet.slug %}" class="item-image">
-                                    <img src="media/{{tablet.product_image}}" alt="" />
-                                    <div class="discount">{{tablet.discount_percentage}} %off</div>
+                                <a href="{% url 'product_detail' p.slug %}" class="item-image">
+                                    <img src="media/{{ p.product_image }}" alt="" />
+                                    <div class="discount">{{ p.discount_percentage }}% OFF</div>
                                 </a>
                                 <div class="item-info">
                                     <h4 class="item-title">
-                                        <a href="{% url 'product_detail' tablet.slug %}">{{tablet.product_name}}<br /></a>
+                                        <a href="{% url 'product_detail' p.slug %}">{{ p.product_name }}<br /></a>
                                     </h4>
-                                    <p class="item-desc">{{tablet.product_description}}.</p>
-                                    <div class="item-price">₹{{tablet.discounted_price}}</div>
-                                    <div class="item-discount-price">₹{{tablet.orignal_price}}</div>
+                                    <p class="item-desc">{{ p.product_description }}.</p>
+                                    <div class="item-price">Rs.{{ p.discounted_price|intcomma }}</div>
+                                    <div class="item-discount-price">Rs.{{ p.orignal_price|intcomma }}</div>
+                                </div>           
+                            </div>
+                            <!-- END item -->
+                        </div>
+                        <!-- END col-2 -->
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- END row -->
+    
+            </div>
+            <!-- END container -->
+        </div>
+        <!-- END #trending-items -->
+    
+      <!-- BEGIN #mobile-list -->
+<div id="mobile-list" class="section-container bg-silver p-t-0">
+    <!-- BEGIN container -->
+    <div class="container">
+        <!-- BEGIN section-title -->
+        <h4 class="section-title clearfix">
+            <a href="{% url 'product' %}" class="pull-right">SHOW ALL</a>
+            Mobile Phones
+            <small>Shop and get your favorite phone at amazing prices!</small>
+        </h4>
+        <!-- END section-title -->
+
+        <!-- BEGIN category-container -->
+        <div class="category-container">
+            <!-- BEGIN category-sidebar -->
+            <div class="category-sidebar">
+                <ul class="category-list">
+                    <li class="list-header">Top Categories</li>
+                    <li><a href="{% url 'product' %}"><strong>All Brands</strong></a></li>
+
+                    {% for c in mobile_companies %}                
+
+                    <li><a href="{% url 'product_by_company' company_name=c %}">{{ c }} </a></li>
+
+                    {% endfor %}
+                    
+                </ul>
+            </div>
+            <!-- END category-sidebar -->
+
+            <!-- BEGIN category-detail -->
+            <div class="category-detail">
+                <!-- BEGIN category-item -->
+                <a href="#" class="category-item full">
+                    <div class="item">
+                        <div class="item-cover">
+                            <img src="{% static 'assets/img/samsung-s7-edge.jpg' %}" alt="" />
+                        </div>
+                        <div class="item-info bottom">
+                            <h4 class="item-title">Samsung Galaxy s7 Edge + Geat 360 + Gear VR</h4>
+                            <p class="item-desc">Redefine what a phone can do</p>
+                            <div class="item-price">Rs.799.00</div>
+                        </div>
+                    </div>
+                </a>
+                <!-- END category-item -->
+
+            
+                <!-- BEGIN category-item -->
+                <div class="category-item list">
+                    <!-- BEGIN item-row -->
+                    <div class="item-row">
+                        {% for mobile in mobiles %}
+                            {% if mobile.category.category == 'Mobile Phones' and not mobile.is_trending %}
+                                <!-- BEGIN item -->
+                                <div class="item item-thumbnail">
+                                    <a href="{% url 'product_detail' mobile.slug %}" class="item-image">
+                                        <img src="media/{{ mobile.product_image }}" alt="" />
+                                        <div class="discount">{{ mobile.discount_percentage }} %off</div>
+                                    </a>
+                                    <div class="item-info">
+                                        <h4 class="item-title">
+                                            <a href="{% url 'product_detail' mobile.slug %}">{{ mobile.product_name }}<br /></a>
+                                        </h4>
+                                        <p class="item-desc">{{ mobile.product_description }}.</p>
+                                        <div class="item-price">Rs. {{ mobile.discounted_price|intcomma }}</div>
+                                        <div class="item-discount-price">Rs. {{ mobile.orignal_price|intcomma }}</div>
+                                    </div>
+                                </div>
+                                <!-- END item -->
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+            </div>
+            <!-- END category-detail -->
+        </div>
+        <!-- END category-container -->
+    </div>
+    <!-- END container -->
+</div>
+</div>
+<!-- END #mobile-list -->
+
+        <!-- BEGIN #tablet-list -->
+        <div id="tablet-list" class="section-container bg-silver p-t-0">
+            <!-- BEGIN container -->
+            <div class="container">
+                <!-- BEGIN section-title -->
+                <h4 class="section-title clearfix">
+                    Tablet
+                    <small>Shop and get your favourite tablet at amazing prices!</small>
+                    <a href="{% url 'product' %}" class="pull-right">SHOW ALL</a>
+                </h4>
+                <!-- END section-title -->
+                
+                <!-- BEGIN category-container -->
+                <div class="category-container">
+                    <!-- BEGIN category-sidebar -->
+                    <div class="category-sidebar">
+                        <ul class="category-list">
+                            <li class="list-header">Top Categories</li>
+                            <li><a href="{% url 'product' %}"><strong>All  Brands</strong></a></li>
+    
+                            {% for tablets in tablet_companies %}                   
+                            <li><a href="{% url 'product_by_company_tablets' company_name=tablets %}">{{ tablets }} </a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- END category-sidebar -->
+    
+                    <!-- BEGIN category-detail -->
+                    <div class="category-detail">
+                        <!-- BEGIN category-item -->
+                        <a href="#" class="category-item full">
+                            <div class="item">
+                                <div class="item-cover">
+                                    <img src="{% static 'assets/img/huawei-mediapad.jpg' %}" alt="" />
+                                </div>
+                                <div class="item-info bottom">
+                                    <h4 class="item-title">Huawei MediaPad T1 7.0</h4>
+                                    <p class="item-desc">Vibrant colors. Beautifully displayed</p>
+                                    <div class="item-price">Rs.299.00</div>
                                 </div>
                             </div>
-                            {% endif %}
-                            {% endfor %}
-                            <!-- END item -->
-   
+                        </a>
+                        <!-- END category-item -->
+
+                        <!-- BEGIN category-item -->
+                        <div class="category-item list">
+                            <!-- BEGIN item-row -->
+                            <div class="item-row">
+                                {% for tablet in tablets %}
+                                    {% if tablet.category.category == 'Tablet' %}
+                                        <!-- BEGIN item -->
+                                        <div class="item item-thumbnail">
+                                            <a href="{% url 'product_detail' tablet.slug %}" class="item-image">
+                                                <img src="media/{{ tablet.product_image }}" alt="" />
+                                                <div class="discount">{{ tablet.discount_percentage }} %off</div>
+                                            </a>
+                                            <div class="item-info">
+                                                <h4 class="item-title">
+                                                    <a href="{% url 'product_detail' tablet.slug %}">{{ tablet.product_name }}<br /></a>
+                                                </h4>
+                                                <p class="item-desc">{{ tablet.product_description }}.</p>
+                                                <div class="item-price">Rs. {{ tablet.discounted_price|intcomma }}</div>
+                                                <div class="item-discount-price">Rs. {{ tablet.orignal_price|intcomma }}</div>
+                                            </div>
+                                        </div>
+                                        <!-- END item -->
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!-- END item-row -->
                         </div>
-                        <!-- END item-row -->
-
+                        <!-- END category-item -->
                     </div>
-                    <!-- END category-item -->
+                    <!-- END category-detail -->
                 </div>
-                <!-- END category-detail -->
+                <!-- END category-container -->
             </div>
-            <!-- END category-container -->
+            <!-- END container -->
         </div>
-        <!-- END container -->
-    </div>
-    <!-- END #tablet-list -->
-
-{% endblock %}
+        <!-- END #tablet-list -->
+    {% endblock %}

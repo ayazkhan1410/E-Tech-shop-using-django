@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %} <title> Order Progress </title>{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'assets/css/progress.css' %}">
+
+<div class="content-wrapper">
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title text-center mb-4">Track Your Order</h4>
+                    <div class="text-center mb-4">
+
+                        <ol class="ProgressBar">
+
+                            {% for i in orderstatus %}
+                            <li class="ProgressBar-step {% if i.0 <= order.order_status %}is-complete{% endif %}">
+
+                                <svg class="ProgressBar-icon">
+                                    <use xlink:href="#checkmark-bold"/>
+                                </svg>
+
+                                <span class="ProgressBar-stepLabel">{{ i.1 }}</span>
+                            </li>
+
+                            {% endfor %}
+
+                        </ol>
+
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="checkmark-bold" viewBox="0 0 24 24">
+        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+    </symbol>
+</svg>
+
+{% endblock %}

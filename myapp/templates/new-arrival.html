@@ -1,0 +1,164 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %} 
+
+<!-- BEGIN search-results -->
+<div id="search-results" class="section-container bg-silver">
+    <!-- BEGIN container -->
+    <div class="container">
+        <!-- BEGIN search-container -->
+        <div class="search-container">
+            <!-- BEGIN search-content -->
+            <div class="search-content">
+                <!-- BEGIN search-toolbar -->
+                <div class="search-toolbar">
+                    <!-- BEGIN row -->
+                    <div class="row">
+
+                    <div class="col-md-6">
+                    <h4>Here are our <b>New Arrival Products</b> for you</h4>
+                    </div>
+
+
+                        <!-- END col-6 -->
+                        <!-- BEGIN col-6 -->
+                        <div class="col-md-6 text-right">
+                            <ul class="sort-list">
+                                <li class="text"><i class="fa fa-filter"></i> Sort by:</li>
+                                <li class="active"><a href="#">Popular</a></li>
+                                <li><a href="#">New Arrival</a></li>
+                            </ul>
+                        </div>
+                        <!-- END col-6 -->
+                    </div>
+                    <!-- END row -->
+                </div>
+                <!-- END search-toolbar -->
+
+                <div class="search-item-container">
+                    <!-- BEGIN item-row -->
+                    <div class="item-row">
+                        <!-- BEGIN item -->
+                        {% for product in new_arrivals %}
+                        <div class="item item-thumbnail">
+                            <a href="{% url 'product_detail' product.slug %}" class="item-image">
+                                <img src="{{ product.product_image.url }}" alt="No image" /> 
+                                <div class="discount">{{ product.discount_percentage }} % OFF</div>
+                            </a>
+
+                            <div class="item-info">
+                                <h4 class="item-title">
+                                    <a href="{% url 'product_detail' product.slug  %}">{{ product.product_name }}<br /></a>
+                                </h4>
+                                {% load humanize %}
+                                <p class="item-desc">{{ product.product_description }}</p>
+                                <div class="item-price">{{ product.discounted_price|intcomma }} Rs. </div>
+                                <div class="item-discount-price">Rs. {{ product.orignal_price }}</div>
+                            </div>
+                        </div>
+                        <!-- END item -->
+                        {% endfor %}
+                    </div>
+                    <!-- END item-row -->
+                </div>
+
+                <!-- BEGIN pagination -->
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                {% if new_arrivals.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1" aria-label="First">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                            <span class="sr-only">First</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ new_arrivals.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% for i in new_arrivals.paginator.page_range %}
+                                    <li class="page-item {% if new_arrivals.number == i %}active{% endif %}">
+                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if new_arrivals.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ new_arrivals.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ new_arrivals.paginator.num_pages }}" aria-label="Last">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                            <span class="sr-only">Last</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- END pagination -->
+            </div>
+            <!-- END search-content -->
+
+            <!-- BEGIN search-sidebar -->
+            <div class="search-sidebar">
+                <h4 class="title">Filter By</h4>
+                <form action="{% url 'product' %}" method="post" name="filter_form">
+
+                    {% csrf_token %}
+
+                    {% if messages %}
+                    <div class="alert alert-warning" role="">
+
+                    {% for message in messages %}
+
+                    {{message}}   
+
+                    {% endfor %}
+                    </div>    
+                    {% endif %}
+
+                    <input type="hidden" name="company_name" value="{{ company_name }}">
+                    <div class="form-group">
+                        <label class="control-label">Search Product</label>
+                        <input type="text" class="form-control input-sm" name="search" placeholder="Enter Product name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Price</label>
+                        <div class="row row-space-0">
+                            <div class="col-md-5">
+                                <input type="number" class="form-control input-sm" name="price_from"  placeholder="Price From" />
+                            </div>
+                            <div class="col-md-2 text-center p-t-5 f-s-12 text-muted">to</div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control input-sm" name="price_to"  placeholder="Price To" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-b-30">
+                        <button type="submit" class="btn btn-sm btn-inverse"><i class="fa fa-search"></i> Filter</button>
+                    </div>
+                </form>
+
+               
+            
+            <!-- END search-sidebar -->
+
+        </div>
+        <!-- END search-container -->
+    </div>
+    <!-- END container -->
+</div>
+<!-- END search-results -->
+
+{% endblock %}

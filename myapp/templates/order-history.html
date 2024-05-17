@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}<title>Order History</title>{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Order History</h2>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="list-group">
+                {% for order in order %}
+                
+                <div class="list-group-item list-group-item-action shadow-sm mb-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <div class="cart-product">
+                            <div class="product-details">
+                                <img src="{{ order.product.product_image.url }}" alt="{{ order.product.product_name }}" class="product-img img-fluid" style="max-width: 100px;">
+                                <div class="product-info">
+                                    <div class="product-name">{{ order.product.product_name }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-details">
+                            <div>
+                                <h5 class="mb-1">Order Date: {{ order.created_at|date:"F j, Y" }}</h5>
+                                <small>Total Price: {{ order.total_price }}</small>
+                                <p class="mb-1">Status: {{ order.get_order_status_display }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

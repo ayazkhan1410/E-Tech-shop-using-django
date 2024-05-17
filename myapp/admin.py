@@ -5,11 +5,11 @@ from .models import *
 @admin.register(CustomUser)
 class AdminCustomUser(admin.ModelAdmin):
     list_display = [
+        "email",
         "first_name",
         "last_name",
-        "email",
-        # "phone",
-        # "address",
+        "phone",
+        "address",
         "user_profile",
                     ]
     search_fields = ['email']
@@ -48,6 +48,7 @@ class AdminProduct(admin.ModelAdmin):
         "product_image",
         "is_stock",
         "is_active",
+        "is_trending",
         "slug"
     ]
     search_fields = ['product_name']
@@ -111,11 +112,24 @@ class AdminCart(admin.ModelAdmin):
         "product",
         "quantity",
         "is_ordered",
-        "total_price"
+        "total_price",
     ]
     search_fields = ["user"]
     list_per_page = 10
 
+@admin.register(OrderTracking)
+class AdminOrderTracking(admin.ModelAdmin):
+    list_display = [
+        "user",
+        "product",
+        "order_id",
+        "order_status",
+        "quantity",
+        "total_price"
+    ]
+    search_fields = ['user']
+    list_per_page = 10
+    
 @admin.register(ShippingAddress)
 class AdminShippingAddress(admin.ModelAdmin):
     list_display = [
@@ -125,7 +139,7 @@ class AdminShippingAddress(admin.ModelAdmin):
         "area_code",
         "primary_phone",
         "street_address",
-        "zip_code"
+        "zip_code",
     ]
     search_fields = ['first_name']
     list_per_page = 10
@@ -142,11 +156,26 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Review)
 class AdminReview(admin.ModelAdmin):
     list_display = [
+        "product",
         "user",
         "name",
         "title",
         "review",
         "rating"
     ]
-    search_fields = ['user']
+    search_fields = ['product']
     list_per_page = 10
+
+# @admin.register(OrderTracking)
+# class AdminOrderTracking(admin.ModelAdmin):
+#     list_display = [
+#         "user",
+#         "product",
+#         # "order_id",
+#         "created_at",
+#         "updated_at",
+#         "choice"
+    
+#     ]
+#     search_fields = ['user']
+#     list_per_page = 20
