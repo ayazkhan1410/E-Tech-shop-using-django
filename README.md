@@ -155,14 +155,3 @@ For queries or suggestions, feel free to contact the author:
 ## 🎉 Acknowledgments
 
 - Special thanks to the Django community for their extensive documentation and support.
-```
-
----
-
-### Changes and Improvements:
-1. **Better Feature Descriptions:** Clearer points highlighting key functionalities.
-2. **Project Structure Section:** Added a file structure overview for clarity.
-3. **Usage Section Expanded:** Provided more guidance on both admin and user-side operations.
-4. **Contributing Instructions:** Clearer process for contributing to the project.
-5. **Technologies Used:** Highlighted key technologies utilized.
-6. **Contact and Acknowledgments:** Added sections to give credit and provide contact info.  
