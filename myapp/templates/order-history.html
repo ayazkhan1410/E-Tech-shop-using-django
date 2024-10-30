@@ -5,8 +5,16 @@
 <div class="container mt-5">
     <h2 class="mb-4">Order History</h2>
     <div class="row">
+        {% if messages %}
+            <div class="alert alert-success" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
         <div class="col-md-8 offset-md-2">
             <div class="list-group">
+                {% if order %}
                 {% for order in order %}
                 
                 <div class="list-group-item list-group-item-action shadow-sm mb-3">
@@ -31,6 +39,17 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% else %}
+
+                <tr>
+                    <td colspan="9">
+                        <div class="text-center alert alert-info" role="alert">
+                            No orders found.
+                        </div>
+                    </td>
+                </tr>
+                
+                {% endif %}
             </div>
         </div>
     </div>

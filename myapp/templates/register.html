@@ -2,54 +2,56 @@
 {% block content %}
 {% load static %}
 
-<div class="container">
-    <form class="col-6 card shadow" method="post" enctype="multipart/form-data">
-  
-      {% csrf_token %}
-      <h2 class="text-center mb-4">Register Here</h2>
-      <hr>
-  
-      {% if messages %}
-      <div class="alert alert-success" role="alert">
-        {% for message in messages %}
-        {{ message }}
-        {% endfor %}
-      </div>
-      {% endif %}
-  
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">First Name</label>
-        <input type="text" name="first_name" required class="form-control" placeholder="Enter your First Name">
-      </div>
-  
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Last Name</label>
-        <input type="text" name="last_name" required class="form-control" placeholder="Enter your Last Name">
-      </div>
-  
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Email</label>
-        <input type="text" name="email" required class="form-control" placeholder="Enter your Unique user Name">
-      </div>
-  
-      <div class="mb-3">
-        <label class="form-label">Profile Photo:</label>
-        <input id="image" type="file" alt="no image" name="profile_photo" placeholder="photo" capture>
-      </div>
-  
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Password</label>
-        <input type="password" name="password" required class="form-control" placeholder="Enter your Password">
-      </div>
-  
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Re-Password</label>
-        <input type="password" name="repassword" required class="form-control" placeholder="Re-enter password">
-      </div>
-  
-      <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
-      <button type="submit" class="btn btn-primary">Register</button>
-  
-    </form>
-  </div>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-md-8 col-lg-6">
+        <form class="card p-4 shadow-lg" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 class="text-center mb-4">Register Here</h2>
+            <hr>
+
+            {% if messages %}
+            <div class="alert alert-success" role="alert">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" id="first_name" name="first_name" required class="form-control" placeholder="Enter your First Name">
+            </div>
+
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required class="form-control" placeholder="Enter your Last Name">
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" required class="form-control" placeholder="Enter your Email">
+            </div>
+
+            <div class="mb-3">
+                <label for="profile_photo" class="form-label">Profile Photo:</label>
+                <input id="profile_photo" type="file" name="profile_photo" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" required class="form-control" placeholder="Enter your Password">
+            </div>
+
+            <div class="mb-3">
+                <label for="repassword" class="form-label">Re-Password</label>
+                <input type="password" id="repassword" name="repassword" required class="form-control" placeholder="Re-enter password">
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="mb-0">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

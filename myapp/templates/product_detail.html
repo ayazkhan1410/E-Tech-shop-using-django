@@ -16,12 +16,7 @@
   <!-- BEGIN container -->
   <div class="container">
     <!-- BEGIN breadcrumb -->
-    <ul class="breadcrumb m-b-10 f-s-12">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Mobile Phone</a></li>
-      <li><a href="#">Apple</a></li>
-      <li class="active">{{product.product_name}}</li>
-    </ul>
+   
     <!-- END breadcrumb -->
 
     <!-- BEGIN product -->
@@ -63,14 +58,7 @@
               <span class="label label-success">{{product.discount_percentage}} % OFF</span>
               {{product.product_name}}
             </h1>
-            <ul class="product-category">
-              <li><a href="#">iPhone</a></li>
-              <li><a href="#">mobile phone</a></li>
-              <li>/</li>
-              <li><a href="#">electronics</a></li>
-              <li>/</li>
-              <li><a href="#">lifestyle</a></li>
-            </ul>
+            
           </div>
           <!-- END product-info-header -->
 
@@ -91,7 +79,8 @@
           <!-- BEGIN product-info-list -->
           <ul class="product-info-list">
             <li>
-              <i class="fa fa-circle"></i> {{product.product_description}}
+
+              {{product.product_description}}           
             </li>
             <!-- <li><i class="fa fa-circle"></i> Fingerprint-resistant oleophobic coating</li>
                                 <li><i class="fa fa-circle"></i> A9 chip with 64-bit</li>
@@ -209,7 +198,7 @@
                 
                 <!-- BEGIN review -->
               
-                {% for review in review_obj %}
+                {% for review in reviews %}
                 <div class="review">
 
                     <div class="review-info">
@@ -236,7 +225,6 @@
                         </div>
 
                         <div class="review-name">{{ review.name}}</div>
-                        <div class="review-date">{{ review.name }}</div> 
                     </div>
 
                     <div class="review-title">
@@ -249,9 +237,10 @@
                     <hr>
                 </div>
                 {% endfor %}
-
+              
               <!-- END review -->
           </div>
+          
           <!-- END col-7 -->
 
           <!-- BEGIN col-5 -->
@@ -295,7 +284,7 @@
                 </form>
             </div>
         </div>
-        
+        {% include 'review-paginator.html' %}
           
               <!-- END review-form --> 
               </div>
@@ -316,12 +305,16 @@
 
     <!-- BEGIN similar-product -->
    
-    <h4 class="m-b-15 m-t-30">You Might Also Like</h4>
+    <center>
+      <h2>You Might Also Like</h2>
+    </center>
+    <br>
     <div class="row row-space-10">
+     
       {% for p in random_products %}
       
 
-      <div class="col-md-2 col-sm-4">
+      <div class="col-md-2 col-sm-6">
         <!-- BEGIN item -->
         
         <div class="item item-thumbnail">
@@ -347,6 +340,7 @@
       </div>
       {% endfor %}
     </div>
+    <hr>
     <!-- END similar-product -->
   </div>
   <!-- END container -->

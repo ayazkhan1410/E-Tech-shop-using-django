@@ -22,90 +22,67 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Count
 import random
-# Create your views here.
+
 
 def home(request):
-    
-    category = Category.objects.all()
-    
-    # Fetch all active mobile Companies
-    active_mobile_brands = Product.objects.filter(category__category='Mobile Phones', is_active=True)
-    categories = Category.objects.filter(is_active = True)
-    
-    active_categories = {}
-    
-    for item in categories:
-        active_categories[item.category] = True
+    # Fetch all active categories
+    categories = Category.objects.filter(is_active=True)
 
-        
-    
-    mobile_companies = set()
-    
-    # Print all company names associated with mobile products
-    for mobile in active_mobile_brands:
-        mobile_companies.add(mobile.company.company)
-    
-    active_tablet_brands = Product.objects.filter(category__category='Tablet', is_active=True)
-    tablet_companies = set()
-    
-    for tablets in active_tablet_brands:
-        tablet_companies.add(tablets.company.company)
-        
-    # taking mobile phones category  and its company brand
-    mobile_brand = get_object_or_404(Category, category='Mobile Phones')
-    company_brand = Company.objects.filter(category=mobile_brand).order_by('-id')[:6]
-        
-    # taking tablet category and its company brand
-    tablet_brand = get_object_or_404(Category, category='Tablet')
-    tab_brand = Company.objects.filter(category=tablet_brand)
-    
-    # Fetching mobile phone only
+    # Fetch all active mobile brands
+    active_mobile_brands = Product.objects.filter(
+        category__category='Mobile Phones', is_active=True
+    ).select_related('company')
+
+    mobile_companies = set(mobile.company.company for mobile in active_mobile_brands)
+
+    # Fetch all active laptop brands
+    active_laptop_brands = Product.objects.filter(
+        category__category='Laptops', is_active=True
+    ).select_related('company')
+
+    laptop_companies = set(laptop.company.company for laptop in active_laptop_brands)
+
+    # Fetching company brands for Mobile, Tablet, and Laptops
+    company_brand_mobile = Company.objects.filter(category__category='Mobile Phones').order_by('-id')[:6]
+    company_brand_tablet = Company.objects.filter(category__category='Tablet').order_by('-id')[:6]
+    company_brand_laptop = Company.objects.filter(category__category='Laptops').order_by('-id')[:6]
+
+    # Fetching mobile phones, laptops, and trending products
     mobiles = Product.objects.filter(category__category='Mobile Phones', is_active=True).order_by('-id')[:6]
-        
-    # Fetching tablets only
-    tablets = Product.objects.filter(category__category='Tablet', is_active=True).order_by('-id')[:6]
-    
-    # Fetching trending items
+    laptops = Product.objects.filter(category__category='Laptops', is_active=True).order_by('-id')[:6]
     trending_products = Product.objects.filter(is_trending=True, is_active=True).order_by('-id')[:6]
-    
-    # Fetching Latest Products
-    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
-   
-    # You might also like section
-    product = Product.objects.all()
-    
-    # shuffle the query
-    shuffled_products = list(product)
-    random.shuffle(shuffled_products)
-    
-    
-    if request.method == "POST":
-        email = request.POST.get('email')
-        
-        touch = StayInTouch.objects.create(email=email)
-        touch.save()
-        messages.success(request, 'Your email has been saved successfully')
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4]
+
+    # Fetching all products globally and shuffling
+    all_products = list(Product.objects.all())
+    random.shuffle(all_products)
+    shuffled_products = all_products[:6]
 
     context = {
-        'company_brand': company_brand,
-        'tab_brand': tab_brand,
-        
-        "mobile_companies": mobile_companies,
-        "tablet_companies": tablet_companies,
-        
-        "trending_products":trending_products,
-        
-        'tablets':tablets,
-        'mobiles':mobiles,
-        'latest_products':latest_products,
-        
-        "active_categories":active_categories
-        
-        # 'product': product,
-    
+        'company_brand_mobile': company_brand_mobile,
+        'company_brand_tablet': company_brand_tablet,
+        'company_brand_laptop': company_brand_laptop,
+        'mobile_companies': mobile_companies,
+        'laptop_companies': laptop_companies,
+        'mobiles': mobiles,
+        'laptops': laptops,
+        'trending_products': trending_products,
+        'latest_products': latest_products,
+        'shuffled_products': shuffled_products,
+        'categories': categories,
     }
     
+    if request.method == "POST":
+        search = request.POST.get('search')
+        if search:
+            search_obj = Product.objects.filter(
+                Q(product_name__icontains=search) | 
+                Q(product_description__icontains=search)
+            )
+            return render(request, 'search_results.html', {'search_obj': search_obj})
+
     return render(request, "home.html", context)
+
 
 def search_results(request):
     return render(request, 'search_results.html')
@@ -120,12 +97,18 @@ def calculate_delivery_date(order_date):
     return current_date
 
 def about_us(request):
-    return render(request, 'about_us.html')
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
+    
+    context = {
+        'latest_products': latest_products
+    }
+    return render(request, 'about_us.html', context)
+
 @login_required(login_url='login')
 # add to cart
 def checkout_cart(request, slug):
-
-    product = Product.objects.get(slug=slug)
+    product = Product.objects.values_list('slug', flat=True).get(slug=slug)
+       
     user = request.user
     cart_items, created = Cart.objects.get_or_create(user=user, product=product, is_ordered=False)
     
@@ -137,7 +120,6 @@ def checkout_cart(request, slug):
         messages.success(request, f"Another {product.product_name} has been added to cart!!")
         
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 def calculate_cart_item_total(cart_item):
 
@@ -191,12 +173,13 @@ def add_to_cart(request):
         # Calculate total price for each cart item
         calculate_cart_item_total(cart_item)
         subtotal += cart_item.total_price
-        
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     context = {
         'cart_items': cart_items,
         'subtotal': subtotal,
         'total': subtotal,
-        "delivery_date": delivery_date
+        "delivery_date": delivery_date,
+        'latest_products':latest_products
     }
 
     return render(request, 'checkout_cart.html', context)
@@ -217,8 +200,8 @@ def get_cart_data(request):
         'subtotal': subtotal,
         'total': total,
     }
-
     return data
+
 @login_required(login_url='login')
 def remove_cart(request, slug):
     product = Product.objects.get(slug=slug)
@@ -227,6 +210,7 @@ def remove_cart(request, slug):
     cart_items = Cart.objects.get(user=user, product=product, is_ordered=False)
     cart_items.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 @login_required(login_url='login')
 def checkout_info(request):
     
@@ -250,8 +234,13 @@ def checkout_info(request):
         )
         shipping_obj.save()
         return redirect('checkout_payment')
-        
-    return render(request, 'checkout_info.html')
+    
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
+    context = {
+        'latest_products': latest_products
+    }    
+    return render(request, 'checkout_info.html',context)
+
 @login_required(login_url='login')
 def checkout_payment(request):
     try:
@@ -287,19 +276,21 @@ def checkout_payment(request):
 
         # Check if the session was created successfully
         if session:
-            for item in cart_items:
-                OrderTracking.objects.create(
-                    user=request.user,
-                    product=item.product,
-                    quantity=item.quantity,
-                    total_price=item.total_price,
-                    order_status=2,  # Placed
-                )
-                
+           for item in cart_items:
+        # Create an OrderTracking entry for each item in the cart
+            OrderTracking.objects.create(
+                user=request.user,
+                product=item.product,
+                quantity=item.quantity,
+                total_price=item.total_price,
+                order_status=2,  # Placed
+            )
+            # Mark the item as ordered and then delete it from the cart
             item.mark_as_ordered_or_deleted()
             item.delete()
-            
-            return redirect(session.url)
+    
+        # Redirect to the session URL
+        return redirect(session.url)
   
     except Exception as e:
         print(e)
@@ -307,15 +298,18 @@ def checkout_payment(request):
 
     # If an error occurs or session creation fails, redirect back to the checkout page
     return redirect('checkout_payment')
+
 @login_required(login_url='login')
 def checkout_complete(request):
     # Retrieve all ordered items for the current user
-    ordered_items = OrderTracking.objects.filter(user=request.user)
+    ordered_items = OrderTracking.objects.filter(user=request.user).order_by('-id')
     delivery_date = calculate_delivery_date(timezone.now())
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
 
     context = {
-        'ordered_items': ordered_items,
-        'delivery_date': delivery_date
+        'ordered_items': ordered_items,  # Use a plural name to indicate multiple items
+        'delivery_date': delivery_date,
+        'latest_products': latest_products
     }
 
     return render(request, 'checkout_complete.html', context)
@@ -335,23 +329,39 @@ def contact_us(request):
        return redirect('contact_us')
        
     return render(request, 'contact_us.html')
+
 @login_required(login_url='login')
 def payment_failed(request):
-    return render(request, 'payment-failed.html')
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
+    context = {
+        'latest_products': latest_products
+    }
+    return render(request, 'payment-failed.html', context)
+
 @login_required(login_url='login')
 def faq(request):
     return render(request, 'faq.html')
+
 @login_required(login_url='login')
 def my_account(request):
-    return render(request, 'my_account.html')
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
+    order = OrderTracking.objects.filter(user = request.user).order_by('-id')
+    delivery_data = calculate_delivery_date(timezone.now())
+    context = {
+        'order': order, 
+        'delivery_date': delivery_data,
+        'latest_products': latest_products
+    }
+    return render(request, 'my_account.html', context)
 
 def product_detail(request, slug):
     # Retrieve the product by slug
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     product = get_object_or_404(Product, slug=slug)
     product_description = ProductDescription.objects.filter(product=product)
-    product_img = ProductDescription.objects.filter(product=product)
-    information = AdditionalInformation.objects.filter(product=product)
-    reviews = Review.objects.filter(product=product)
+    product_img = ProductDescription.objects.filter(product=product) # only filter images for the current product
+    information = AdditionalInformation.objects.filter(product=product) # Retrieve additional information for the product
+    reviews = Review.objects.filter(product=product) # only filter reviews for the current product
     review_count = reviews.count()
 
     # Shuffle and get random products
@@ -371,11 +381,14 @@ def product_detail(request, slug):
             return redirect('login')  # Redirect to login page
 
         # Check if the user has purchased the product
-        user_purchased = Review.objects.filter(user=request.user, product=product).exists()
+        user_purchased = OrderTracking.objects.filter(user = request.user, product=product).exists()
         if not user_purchased:
             messages.error(request, 'You can only review products you have purchased.')
             return redirect('product_detail', slug=slug)
-
+        if user_purchased:
+            messages.error(request, 'You have already reviewed this product.')
+            return redirect('product_detail', slug=slug)
+        
         # If the user is authenticated and has purchased the product, proceed with review submission
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -395,6 +408,16 @@ def product_detail(request, slug):
         messages.success(request, 'Your review has been submitted successfully')
         return redirect('product_detail', slug=slug)
 
+    review_obj = Review.objects.filter(product=product).order_by('-id')
+    try:
+        paginated_reviews = Paginator(review_obj, 5)
+        page_number = request.GET.get('page')
+        reviews = paginated_reviews.page(page_number)
+    except PageNotAnInteger:
+        reviews = paginated_reviews.page(1)
+    except EmptyPage:
+        reviews = paginated_reviews.page(paginated_reviews.num_pages)
+        
     # Check if the user is authenticated to filter their reviews
     user_reviews = None
     if request.user.is_authenticated:
@@ -410,14 +433,16 @@ def product_detail(request, slug):
         'reviews': reviews,
         'user_reviews': user_reviews,
         'random_products': random_products,
+        'latest_products': latest_products,
+        'reviews':paginated_reviews
     }
 
     return render(request, 'product_detail.html', context)
 
 def product(request):
-    
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     total_products = Product.objects.all().count()
-    all_products = Product.objects.all()
+    all_products = Product.objects.all().order_by('-id')
 
     category_count  = {}
     
@@ -437,7 +462,7 @@ def product(request):
         else:
             company_counts[company_name] += 1
     
-    paginator = Paginator(all_products, 9)
+    paginator = Paginator(all_products, 6)
     page_number = request.GET.get('page')
 
     try:
@@ -456,8 +481,8 @@ def product(request):
         
         # Filter products based on company
         if company_name:
-            all_products = all_products.filter(company__company=company_name)
-            paginator = Paginator(all_products, 9)
+            all_products = all_products.filter(company__company=company_name) # filter company name from the product model
+            paginator = Paginator(all_products, 9) # applying pagination to the filtered products
             paginated_products = paginator.page(1)  # Reset page to 1 after filtering
 
         # Check if price_from and price_to are provided and convert them to integers
@@ -476,7 +501,7 @@ def product(request):
             all_products = all_products.filter(Q(product_name__icontains=search) | Q(product_description__icontains=search))
 
         # Re-paginate the queryset after applying filters
-        paginator = Paginator(all_products, 9)
+        paginator = Paginator(all_products, 6)
         paginated_products = paginator.page(1)  # Reset page to 1 after filtering
 
     context = {
@@ -484,7 +509,8 @@ def product(request):
         "total_products": total_products,
         "mobile_companies": category_count,
         'show_top_companies': True,
-        'company_counts': company_counts
+        'company_counts': company_counts,
+        'latest_products': latest_products,
 
     }
 
@@ -492,9 +518,9 @@ def product(request):
 
 def new_arrival(request):
     seven_days_ago = timezone.now() - timedelta(days=7)
-    new_arrivals = Product.objects.filter(created_at__gte=seven_days_ago)
-            
-    paginator = Paginator(new_arrivals, 9)
+    new_arrivals = Product.objects.filter(created_at__gte=seven_days_ago).order_by('-id')
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
+    paginator = Paginator(new_arrivals, 6)
     page_number = request.GET.get('page')
 
     try:
@@ -506,15 +532,16 @@ def new_arrival(request):
         
     context = {
         'new_arrivals': paginated_products,
-        
+        'latest_products':latest_products
     }
     
     return render(request, 'new-arrival.html', context)
-@login_required(login_url='login')
-def product_by_category(request, category_name):
 
-    category_products = Product.objects.filter(category__category=category_name)
+@login_required(login_url='login')
+def laptops(request):
+    category_name = 'Laptops' # Category name for laptops
     
+    category_products = Product.objects.filter(category__category=category_name, is_active=True).order_by('-id')
     paginator = Paginator(category_products, 9)
     page_number = request.GET.get('page')
     
@@ -526,22 +553,71 @@ def product_by_category(request, category_name):
         paginated_products = paginator.page(paginator.num_pages)
     
     total_products = category_products.count()
-    print("Total Products: ", total_products)
     
     context = {
         'product_names': paginated_products,
-        "category_name": category_name,
-        "total_products": total_products,  
-        'show_top_companies': False,  
-
-        
+        'category_name': category_name,
+        'total_products': total_products,
+        'show_top_companies': False,
     }
-    return render(request, 'product.html', context)
-@login_required(login_url='login')
-def product_by_company(request, company_name):
     
+    return render(request, 'product.html', context)
+
+@login_required(login_url='login')
+def tablets(request):
+    category_name = 'Tablet'
+    category_products = Product.objects.filter(category__category=category_name, is_active=True).order_by('-id')
+    paginator = Paginator(category_products, 9)
+    page_number = request.GET.get('page')
+    
+    try:
+        paginated_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        paginated_products = paginator.page(1)
+    except EmptyPage:
+        paginated_products = paginator.page(paginator.num_pages)
+    
+    total_products = category_products.count()
+    
+    context = {
+        'product_names': paginated_products,
+        'category_name': category_name,
+        'total_products': total_products,
+        'show_top_companies': False,
+    }
+    
+    return render(request, 'product.html', context)
+
+@login_required(login_url='login')
+def mobile_phones(request):
+    category_name = 'Mobile Phones'
+    category_products = Product.objects.filter(category__category=category_name, is_active=True).order_by('-id')
+    paginator = Paginator(category_products, 6)
+    page_number = request.GET.get('page')
+    
+    try:
+        paginated_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        paginated_products = paginator.page(1)
+    except EmptyPage:
+        paginated_products = paginator.page(paginator.num_pages)
+    
+    total_products = category_products.count()
+    
+    context = {
+        'product_names': paginated_products,
+        'category_name': category_name,
+        'total_products': total_products,
+        'show_top_companies': False,
+    }
+    
+    return render(request, 'product.html', context)
+
+@login_required(login_url='login')
+def product_by_company_laptops(request, company_name):
     # Filter products based on the company name
-    company_products = Product.objects.filter(company__company=company_name)   
+    company_products = Product.objects.filter(company__company=company_name, category__category='Laptop', is_active=True)
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     total_products = company_products.count()
     
     paginator = Paginator(company_products, 9)
@@ -557,10 +633,61 @@ def product_by_company(request, company_name):
     context = {
         'product_names': paginated_products,
         "company_name": company_name,
-        "total_products":total_products
+        "total_products":total_products,
+        'latest_products':latest_products
     }
     
     return render(request, 'product.html', context)
+
+
+@login_required(login_url='login')
+def product_by_company(request, company_name):
+    
+    # Filter products based on the company name
+    company_products = Product.objects.filter(company__company=company_name).order_by('-id')  
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
+    total_products = company_products.count()
+    
+    paginator = Paginator(company_products, 9)
+    page_number = request.GET.get('page')
+    
+    try:
+        paginated_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        paginated_products = paginator.page(1)
+    except EmptyPage:
+        paginated_products = paginator.page(paginator.num_pages)
+        
+    context = {
+        'product_names': paginated_products,
+        "company_name": company_name,
+        "total_products":total_products,
+        'latest_products':latest_products
+    }
+    
+    return render(request, 'product.html', context)
+
+def product_by_category(request, category_id):
+    
+    category = get_object_or_404(Category, id=category_id)
+    products = Product.objects.filter(category=category, is_active=True)
+    product_count_filter = products.count()
+    paginator = Paginator(products, 9)
+    
+    page_number = request.GET.get('page')
+    try:
+        paginated_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        paginated_products = paginator.page(1)
+    except EmptyPage:
+        paginated_products = paginator.page(paginator.num_pages)
+    context = {
+        'category': category,
+        'paginated_products': paginated_products,
+        'product_count_filter': product_count_filter,
+    }
+    return render(request, 'product_by_category.html', context)
+
 @login_required(login_url='login')
 def product_by_company_tablets(request, company_name=None):
         
@@ -587,7 +714,7 @@ def product_by_company_tablets(request, company_name=None):
 def order_tracking(request):
     
     delivery_date = calculate_delivery_date(timezone.now())
-    
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     if request.method == "POST":
         order_id = request.POST.get('order_id')
         
@@ -599,30 +726,40 @@ def order_tracking(request):
         
         context = {
             'cart_items': cart_items,
-            "delivery_date":delivery_date
+            "delivery_date":delivery_date,
+            'latest_products':latest_products
         }
         return render(request, 'order-status.html', context)  
     
     return render(request, 'order_tracking.html')
 
 def login_page(request):
+    
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4]
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
         
-        if not User.objects.filter(email= email).exists():
-            messages.info(request,'Please Create Account first')
+        if not User.objects.filter(email=email).exists():
+            messages.info(request, 'Please create an account first.')
             return redirect('login')
+        
         user = authenticate(email=email, password=password)
-        if user is None:
-            messages.info(request, 'Invalid Password')
-            return redirect('login')
-        else:
+        
+        if user is not None:
             login(request, user)
-            return redirect('home')              
-    return render(request, 'login.html')
+            return redirect('/')
+        else:
+            messages.info(request, 'invalid Email and Password')
+            return redirect('login')
+    
+    context = {
+        'latest_products': latest_products
+    }
+    return render(request, 'login.html', context)
 
 def register(request):
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -639,11 +776,16 @@ def register(request):
             user = User.objects.create_user(email=email, first_name=first_name, last_name=last_name, user_profile=profile_photo, password=password)
             user.set_password(password)
             user.save()
-            messages.info(request, 'Account created successfully')
-            return redirect('login')
-    return render(request, 'register.html')
+            login(request, user)
+            return redirect('/')
+    context = {
+        'latest_products':latest_products
+    }
+    return render(request, 'register.html', context)
+
+
 def forget_password(request):
-    
+    latest_products = Product.objects.filter(is_active=True).order_by('-id')[:4] 
     try:
       if request.method == "POST":
           email = request.POST.get('email')
@@ -664,8 +806,10 @@ def forget_password(request):
       
     except Exception as e:
         print(e)
-        
-    return render(request, 'forget_password.html')
+    context = {
+        'latest_products':latest_products
+    }
+    return render(request, 'forget_password.html', context)
 def change_password(request, token):
     
     # Retrieve the Profile object associated with the provided token
@@ -711,13 +855,25 @@ def order_progress(request, pid):
     order = OrderTracking.objects.get(id = pid)
     orderstatus = status
     return render(request, 'order-progress.html', locals())
-@login_required(login_url='login')
 
+@login_required(login_url='login')
 def order_history(request):
     
-    order = OrderTracking.objects.filter(user=request.user)
+    order = OrderTracking.objects.filter(user=request.user).order_by('-id')
     
     return render(request, 'order-history.html', locals())
+
+def cancel_order(request, pid):
+    order = OrderTracking.objects.get(id = pid)
+    order.delete()
+    messages.info(request, 'Order has been cancelled')
+    return redirect('order-history')
+
+def return_order(request, pid):
+    order = OrderTracking.objects.get(id = pid)
+    order.delete()
+    messages.info(request, 'Order has been returned')
+    return redirect('order-history')
 
 def logout_page(request):
     logout(request)

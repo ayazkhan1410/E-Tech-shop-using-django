@@ -23,11 +23,15 @@ urlpatterns = [
     
     path('product/<str:company_name>/', views.product_by_company, name='product_by_company'),
     path('product/<str:company_name>/', views.product_by_company_tablets, name='product_by_company_tablets'),
-    path('product/<str:category_name>', views.product_by_category, name='product_by_category'),
+    path('product/<str:company_name>', views.product_by_company_laptops, name='product_by_company_laptops'),
     
+    path('category/<int:category_id>/', views.product_by_category, name='product_by_category'),
     path('product_detail/<str:slug>', views.product_detail, name='product_detail'),
     
-
+    path('products/mobile-phones/', views.mobile_phones, name='mobile_phones'),
+    path('products/tablets/', views.tablets, name='tablets'),
+    path('products/laptops/', views.laptops, name='laptops'),
+    
     # Login, logout
     path('register', views.register, name='register'),
     path('login', views.login_page, name='login'),
@@ -46,7 +50,8 @@ urlpatterns = [
     path('order_tracking', views.order_tracking, name='order_tracking'),
     path('order-progress/<int:pid>/', views.order_progress, name="order_progress"),
     path('order-history', views.order_history, name='order-history'),
-    
+    path('cancel-order/<int:pid>/', views.cancel_order, name='cancel-order'),
+    path('return-order/<int:pid>/', views.return_order, name='return-order'),
     # new arrival
     path('new-arrival', views.new_arrival, name='new-arrival'),
 

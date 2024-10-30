@@ -75,6 +75,7 @@
     <div class="checkout-message">
         <h1>Thank you! <small>Your Payment has been successfully processed with the following details.</small></h1>
         <div class="table-responsive">
+
             <table class="table table-bordered table-payment-summary">
                 <thead class="thead-light">
                     <tr>
@@ -87,18 +88,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for ordered_item in ordered_items %}
-                    <tr>
-                        <td>{{ ordered_item.product.product_name }}</td>
-                        <td>{{ ordered_item.quantity }}</td>
-                        <td>{{ ordered_item.total_price|floatformat:"2"|intcomma }}</td>
-                        <td>{{ ordered_item.order_id }}</td>  <!-- Access the order_id field of OrderTracking -->
-                        <td>{{ ordered_item.created_at|date:"F j, Y" }}</td>  <!-- Access the created_at field of OrderTracking -->
-                        <td>{{ delivery_date|date:"F j, Y" }}</td>
-                    </tr>
-                    {% endfor %}
+                    {% if ordered_items %}
+                        {% for ordered_item in ordered_items %}
+                            <tr>
+                                <td>{{ ordered_item.product.product_name }}</td>
+                                <td>{{ ordered_item.quantity }}</td>
+                                <td>{{ ordered_item.total_price|floatformat:"2"|intcomma }}</td>
+                                <td>{{ ordered_item.order_id }}</td>
+                                <td>{{ ordered_item.created_at|date:"F j, Y" }}</td>
+                                <td>{{ delivery_date|date:"F j, Y" }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6">No recent orders found.</td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
+                
+
+
         </div>
         <p class="text-muted text-center">Should you require any assistance, you can get in touch with the Support Team at (123) 456-7890.</p>
     </div>

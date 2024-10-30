@@ -121,7 +121,7 @@ class AdditionalInformation(models.Model):
         return f"{self.product.product_name} - {self.feature}"
 
 class StayInTouch(models.Model):
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, null=True, blank=True)
 
 class Cart(models.Model):
     
@@ -131,11 +131,11 @@ class Cart(models.Model):
     is_ordered = models.BooleanField(default=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     def mark_as_ordered_or_deleted(self):
-        if not self.is_ordered:
-            self.is_ordered = True
-            self.save()
+            if not self.is_ordered:
+                self.is_ordered = True
+                self.save()
 
     def __str__(self):
         return self.user.email
