@@ -83,7 +83,6 @@ def home(request):
 
     return render(request, "home.html", context)
 
-
 def search_results(request):
     return render(request, 'search_results.html')
 
