@@ -1,8 +1,4 @@
-
-
----
-
-```markdown
+markdown
 # 🛒 E-Tech Shop
 
 **E-Tech Shop** is a feature-rich web application built using **Django** that allows users to browse, search, and purchase a variety of electronic products online. It offers a seamless shopping experience with secure authentication, intuitive product filtering, and an integrated shopping cart and checkout system.
