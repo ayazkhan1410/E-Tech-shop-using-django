@@ -30,7 +30,7 @@ Follow these steps to set up the project locally:
 2. **Navigate into the project directory:**
 
    ```bash
-   cd E-Tech-shop-using-django
+   cd ecom
    ```
 
 3. **Create a virtual environment (optional but recommended):**
